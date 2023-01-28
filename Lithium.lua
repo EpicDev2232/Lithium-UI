@@ -1,3 +1,5 @@
+local Lithium = {}
+
 -- Vars
 
 local UserInputService = game:GetService("UserInputService")
@@ -50,7 +52,7 @@ end
 
 -- Lithium
 
-function MakeWindow(info)
+function Lithium:MakeWindow(info)
 	if info then
 		local LithiumUI = {}
 		LithiumUI.Flags = {}
@@ -711,3 +713,5 @@ function MakeWindow(info)
 		return LithiumUI
 	end
 end
+
+return Lithium
