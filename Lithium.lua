@@ -60,7 +60,7 @@ function Lithium:MakeWindow(info)
 		local UIContainer = Instance.new("ScreenGui")
 		UIContainer.ResetOnSpawn = false
 		UIContainer.IgnoreGuiInset = true
-		UIContainer.Parent = PlayerGui
+		UIContainer.Parent = CoreGui
 		
 		-- Default Values
 		if not info.Title then info.Title = "Lithium" end
