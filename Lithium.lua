@@ -1,5 +1,4 @@
 local Lithium = {}
-Lithium.__index = Lithium
 
 -- Vars
 
