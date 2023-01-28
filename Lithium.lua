@@ -650,7 +650,7 @@ function Lithium:MakeWindow(info)
 				local function UpdateSize()
 					local totalSize = 25
 
-					for _, child in PanelContainer:GetChildren() do
+					for _, child in pairs(PanelContainer:GetChildren()) do
 						if child:IsA("Frame") or child:IsA("TextButton") or child:IsA("TextLabel") then
 							totalSize += child.AbsoluteSize.Y + PanelListLayout.Padding.Offset
 						end
