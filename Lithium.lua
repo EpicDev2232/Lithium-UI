@@ -5,9 +5,7 @@ Lithium.__index = Lithium
 
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
-local Players = game:GetService("Players")
-
-local PlayerGui = Players.LocalPlayer:WaitForChild("PlayerGui")
+local CoreGui = game:GetService("CoreGui")
 
 local Themes = {
 	["Default Green"] = {
@@ -81,7 +79,6 @@ function Lithium:MakeWindow(info)
 		Frame.ClipsDescendants = true
 		Frame.Position = UDim2.new(0.5, 0, 0.5, 0)
 		Frame.Size = UDim2.new(0, 377, 0, 576)
-		Frame.AnchorPoint = Vector2.new(0.5, 0.5)
 		
 		local Containers = Instance.new("Frame")
 		Containers.BackgroundTransparency = 1
@@ -678,6 +675,32 @@ function Lithium:MakeWindow(info)
 			
 			return NewTab
 		end
+		
+		-- Connect Window
+		Topbar.InputBegan:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 then
+				local mousePos = UserInputService:GetMouseLocation()
+				local offset = Frame.AbsolutePosition - mousePos
+				
+				RunService:BindToRenderStep("DragLithiumWindow", 1, function()
+					mousePos = UserInputService:GetMouseLocation()
+					
+					Frame.Position = UDim2.new(0, mousePos.X, 0, mousePos.Y) + UDim2.new(0, offset.X, 0, offset.Y)
+				end)
+			end
+		end)
+		
+		UserInputService.InputBegan:Connect(function(input)
+			if input.KeyCode == Enum.KeyCode.RightShift then
+				UIContainer.Enabled = not UIContainer.Enabled
+			end
+		end)
+		
+		UserInputService.InputEnded:Connect(function(input)
+			if input.UserInputType == Enum.UserInputType.MouseButton1 then
+				RunService:UnbindFromRenderStep("DragLithiumWindow")
+			end
+		end)
 		
 		-- Flag Functions
 		function LithiumUI:GetFlag(name)
