@@ -89,7 +89,8 @@ function Lithium:MakeWindow(info)
 		
 		local Containers = Instance.new("Frame")
 		Containers.BackgroundTransparency = 1
-		Containers.Size = UDim2.new(1, 0, 1, 0)
+		Containers.Size = UDim2.new(1, 0, 1, -60)
+		Containers.Position = UDim2.new(0, 0, 0, 60)
 		Containers.Name = "Containers"
 		Containers.Parent = Frame
 		
@@ -142,7 +143,7 @@ function Lithium:MakeWindow(info)
 		Tabs.BorderSizePixel = 0
 		Tabs.ClipsDescendants = true
 		Tabs.Position = UDim2.new(0, 0, 1, 0)
-		Tabs.Size = UDim2.new(1, 0, 0.73, 0)
+		Tabs.Size = UDim2.new(1, 0, 0, 25)
 		
 		local TabLayout = Instance.new("UITableLayout")
 		TabLayout.Parent = Tabs
@@ -164,8 +165,8 @@ function Lithium:MakeWindow(info)
 			local Container = Instance.new("ScrollingFrame")
 			Container.Name = tabInfo.Name
 			Container.AnchorPoint = Vector2.new(0.5, 0)
-			Container.Position = UDim2.new(0.5, 0, 0, 0)
-			Container.Size = UDim2.new(1, -10,0.887, 0)
+			Container.Position = UDim2.new(0.5, 0, 0, 5)
+			Container.Size = UDim2.new(1, -10, 1, -70)
 			Container.BackgroundTransparency = 1
 			Container.Parent = Containers
             Container.BorderSizePixel = 0
