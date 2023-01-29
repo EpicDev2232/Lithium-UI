@@ -718,7 +718,7 @@ function Lithium:MakeWindow(info)
 						end
 					end
 
-					Panel.Size = UDim2.new(1, 0, 0, totalSize)
+					NewPanel.PanelGui.Size = UDim2.new(1, 0, 0, totalSize)
 				end
 				
 				PanelContainer.ChildAdded:Connect(UpdateSize)
