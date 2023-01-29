@@ -61,7 +61,6 @@ function Lithium:MakeWindow(info)
 		UIContainer.ResetOnSpawn = false
 		UIContainer.IgnoreGuiInset = true
 		UIContainer.Parent = CoreGui
-        UIContainer.ZIndexBehaviour = "Sibling"
 		
 		-- Default Values
 		if not info.Title then info.Title = "Lithium" end
@@ -530,6 +529,7 @@ function Lithium:MakeWindow(info)
 					ColorPickerFrame.Position = UDim2.new(0, 0, 1, 0)
 					ColorPickerFrame.Size = UDim2.new(1, 0, 7, 0)
 					ColorPickerFrame.Visible = false
+					ColorPickerFrame.ZIndex = 2
 					
 					-- Hue
 					local Hue = Instance.new("Frame")
