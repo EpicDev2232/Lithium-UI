@@ -161,12 +161,15 @@ function Lithium:MakeWindow(info)
 			-- Container UI
 			local ExistingContainer = Containers:FindFirstChildOfClass("Frame")
 			
-			local Container = Instance.new("Frame")
+			local Container = Instance.new("ScrollingFrame")
 			Container.Name = tabInfo.Name
 			Container.Position = UDim2.new(0, 5,0.101, 0)
 			Container.Size = UDim2.new(0.971, 0,0.887, 0)
 			Container.BackgroundTransparency = 1
 			Container.Parent = Containers
+            Container.BorderSizePixel = 0
+            Container.ScrollBarThickness = 0
+            Container.CanvasSize = UDim2.new(1, 0, 4, 0)
 			
 			local LeftColumn
 			local RightColumn
@@ -298,7 +301,7 @@ function Lithium:MakeWindow(info)
 					Toggle.AutoButtonColor = false
 					
 					local ToggleIndicator = Instance.new("ImageLabel")
-					ToggleIndicator.Position = UDim2.new(0.842, 0,0.25, 0)
+					ToggleIndicator.Position = UDim2.new(0.92, 0,0.25, 0)
 					ToggleIndicator.Size = UDim2.new(0.059, 0,0.75, 0)
 					ToggleIndicator.BackgroundColor3 = info.Theme.UIAccents
 					ToggleIndicator.BorderSizePixel = 0
@@ -507,7 +510,7 @@ function Lithium:MakeWindow(info)
 					ColorPicker.Parent = PanelContainer
 					
 					local ColorIndicator = Instance.new("ImageButton")
-					ColorIndicator.Position = UDim2.new(0.842, 0,0.25, 0)
+					ColorIndicator.Position = UDim2.new(0.92, 0,0.25, 0)
 					ColorIndicator.Size = UDim2.new(0.059, 0,0.75, 0)
 					ColorIndicator.BackgroundColor3 = NewColorPicker.Value
 					ColorIndicator.BorderSizePixel = 0
@@ -531,13 +534,6 @@ function Lithium:MakeWindow(info)
 					ColorPickerFrame.Size = UDim2.new(1, 0, 7, 0)
 					ColorPickerFrame.Visible = false
                     ColorPickerFrame.ZIndex = 2
-
-                    -- if another color picker is open we should first close it
-                    if LithiumUI.CurrentColorPicker then
-                        LithiumUI.CurrentColorPicker.Visible = false
-                    end
-
-                    LithiumUI.CurrentColorPicker = ColorPickerFrame
 					
 					-- Hue
 					local Hue = Instance.new("Frame")
@@ -624,6 +620,13 @@ function Lithium:MakeWindow(info)
 					-- Connect Color Picker
 					ColorIndicator.Activated:Connect(function()
 						ColorPickerFrame.Visible = not ColorPickerFrame.Visible
+
+                        -- if another color picker is open we should first close it
+                        if LithiumUI.CurrentColorPicker then
+                            LithiumUI.CurrentColorPicker.Visible = false
+                        end
+
+                        LithiumUI.CurrentColorPicker = ColorPickerFrame
 					end)
 					
 					Saturation.MouseButton1Down:Connect(function()
