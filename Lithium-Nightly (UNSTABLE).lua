@@ -61,6 +61,7 @@ function Lithium:MakeWindow(info)
 		UIContainer.ResetOnSpawn = false
 		UIContainer.IgnoreGuiInset = true
 		UIContainer.Parent = CoreGui
+        UIContainer.ZIndexBehaviour = "Sibling"
 		
 		-- Default Values
 		if not info.Title then info.Title = "Lithium" end
@@ -529,7 +530,7 @@ function Lithium:MakeWindow(info)
 					ColorPickerFrame.Position = UDim2.new(0, 0, 1, 0)
 					ColorPickerFrame.Size = UDim2.new(1, 0, 7, 0)
 					ColorPickerFrame.Visible = false
-					ColorPickerFrame.ZIndex = 2
+                    ColorPickerFrame.ZIndex = 2
 					
 					-- Hue
 					local Hue = Instance.new("Frame")
@@ -539,6 +540,7 @@ function Lithium:MakeWindow(info)
 					Hue.Size = UDim2.new(0.66, 0,0.916, 0)
 					Hue.BorderSizePixel = 0
 					Hue.BackgroundColor3 = Color3.new(1,1,1)
+                    Hue.ZIndex = 3
 					
 					local HueGradient = Instance.new("UIGradient")
 					HueGradient.Parent = Hue
@@ -560,7 +562,7 @@ function Lithium:MakeWindow(info)
 					Saturation.Position = UDim2.new(0.053, 0,0.069, 0)
 					Saturation.Size = UDim2.new(0.66, 0,0.916, 0)
 					Saturation.BorderSizePixel = 0
-					Saturation.ZIndex = 2
+					Saturation.ZIndex = 4
 					Saturation.BackgroundColor3 = Color3.new(1,1,1)
 					Saturation.AutoButtonColor = false
 					
@@ -582,6 +584,7 @@ function Lithium:MakeWindow(info)
 					Value.BorderSizePixel = 0
 					Value.BackgroundColor3 = Color3.new(1,1,1)
 					Value.AutoButtonColor = false
+                    Value.ZIndex = 3
 					
 					local ValueGradient = Instance.new("UIGradient")
 					ValueGradient.Parent = Value
@@ -680,15 +683,15 @@ function Lithium:MakeWindow(info)
                     local Line1 = Instance.new("Frame")
                     Line1.BorderColor3 = info.Theme.ZIndex4Col
                     Line1.BorderSizePixel = 1
-                    Line1.Size = UDim2.new(0.5, -(Separator.TextBounds.X * 0.5 + 5), 0, 0)
+                    Line1.Size = UDim2.new(0.5, -(Separator.TextBounds.X * 0.5 + 15), 0, 0)
                     Line1.Position = UDim2.new(0, 0, 0.5, 0)
                     Line1.Parent = Separator
 
                     local Line2 = Instance.new("Frame")
                     Line2.BorderColor3 = info.Theme.ZIndex4Col
                     Line2.BorderSizePixel = 1
-                    Line2.Size = UDim2.new(0.5, -(Separator.TextBounds.X * 0.5 + 5), 0, 0)
-                    Line2.Position = UDim2.new(0.5, Separator.TextBounds.X * 0.5 + 5, 0.5, 0)
+                    Line2.Size = UDim2.new(0.5, -(Separator.TextBounds.X * 0.5 + 15), 0, 0)
+                    Line2.Position = UDim2.new(0.5, Separator.TextBounds.X * 0.5 + 15, 0.5, 0)
                     Line2.Parent = Separator
 
                     return NewSeparator
