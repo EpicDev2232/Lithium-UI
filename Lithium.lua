@@ -89,7 +89,8 @@ function Lithium:MakeWindow(info)
 		
 		local Containers = Instance.new("Frame")
 		Containers.BackgroundTransparency = 1
-		Containers.Size = UDim2.new(1, 0, 1, 0)
+		Containers.Size = UDim2.new(1, 0, 1, -60)
+		Containers.Position = UDim2.new(0, 0, 0, 60)
 		Containers.Name = "Containers"
 		Containers.Parent = Frame
 		
@@ -142,7 +143,7 @@ function Lithium:MakeWindow(info)
 		Tabs.BorderSizePixel = 0
 		Tabs.ClipsDescendants = true
 		Tabs.Position = UDim2.new(0, 0, 1, 0)
-		Tabs.Size = UDim2.new(1, 0, 0.73, 0)
+		Tabs.Size = UDim2.new(1, 0, 0, 25)
 		
 		local TabLayout = Instance.new("UITableLayout")
 		TabLayout.Parent = Tabs
@@ -161,12 +162,16 @@ function Lithium:MakeWindow(info)
 			-- Container UI
 			local ExistingContainer = Containers:FindFirstChildOfClass("Frame")
 			
-			local Container = Instance.new("Frame")
+			local Container = Instance.new("ScrollingFrame")
 			Container.Name = tabInfo.Name
-			Container.Position = UDim2.new(0, 5,0.101, 0)
-			Container.Size = UDim2.new(0.971, 0,0.887, 0)
+			Container.AnchorPoint = Vector2.new(0.5, 0)
+			Container.Size = UDim2.new(1, -5, 1, -70)
+			Container.Position = UDim2.new(0.5, 0, 0, 2.5)
 			Container.BackgroundTransparency = 1
 			Container.Parent = Containers
+            Container.BorderSizePixel = 0
+            Container.ScrollBarThickness = 0
+            Container.CanvasSize = UDim2.new(1, 0, 4, 0)
 			
 			local LeftColumn
 			local RightColumn
@@ -174,7 +179,7 @@ function Lithium:MakeWindow(info)
 			for i = 1,2 do
 				local NewColumn = Instance.new("Frame")
 				NewColumn.BackgroundTransparency = 1
-				NewColumn.Size = UDim2.new(0.49, 0,1, 0)
+				NewColumn.Size = UDim2.new(0.5, -2.5,1, 0)
 				NewColumn.Parent = Container
 				
 				local NewListLayout = Instance.new("UIListLayout")
@@ -187,7 +192,7 @@ function Lithium:MakeWindow(info)
 				else
 					RightColumn = NewColumn
 					RightColumn.Name = "RightColumn"
-					RightColumn.Position = UDim2.new(0.508, 0, 0, 0)
+					RightColumn.Position = UDim2.new(0.5, 2.5, 0, 0)
 				end
 				
 				NewColumn = nil
@@ -217,7 +222,7 @@ function Lithium:MakeWindow(info)
 			TabOutline.LineJoinMode = Enum.LineJoinMode.Bevel
 			
 			TabButton.Activated:Connect(function()
-				for _, OtherContainer in Containers:GetChildren() do
+				for _, OtherContainer in pairs(Containers:GetChildren()) do
 					OtherContainer.Visible = false
 				end
 				
@@ -233,16 +238,17 @@ function Lithium:MakeWindow(info)
 				if not panelInfo.Name then panelInfo.Name = "NewPanel" end
 				
 				-- Panel UI
-				local Panel = Instance.new("Frame")
-				Panel.BackgroundColor3 = info.Theme.ZIndex3Col
-				Panel.BorderSizePixel = 0
-				Panel.Parent = Container:FindFirstChild(panelInfo.Side.. "Column")
+				NewPanel.Gui = Instance.new("Frame")
+				NewPanel.Gui.BackgroundColor3 = info.Theme.ZIndex3Col
+				NewPanel.Gui.BorderSizePixel = 0
+				NewPanel.Gui.Parent = Container:FindFirstChild(panelInfo.Side.. "Column")
+				NewPanel.Gui.Size = UDim2.new(1, 0, 0, 0)
 				
 				local PanelContainer = Instance.new("Frame")
 				PanelContainer.BackgroundTransparency = 1
-				PanelContainer.Position = UDim2.new(0.019, 0, 0, 25)
-				PanelContainer.Size = UDim2.new(0.961, 0,1, -30)
-				PanelContainer.Parent = Panel
+				PanelContainer.Position = UDim2.new(0, 2.5, 0, 25)
+				PanelContainer.Size = UDim2.new(1, -5 ,1, -30)
+				PanelContainer.Parent = NewPanel.Gui
 				PanelContainer.Name = "Container"
 				
 				local PanelListLayout = Instance.new("UIListLayout")
@@ -257,7 +263,7 @@ function Lithium:MakeWindow(info)
 				PanelName.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
 				PanelName.Size = UDim2.new(1, 0, 0, 18)
 				PanelName.BackgroundColor3 = info.Theme.ZIndex2Col
-				PanelName.Parent = Panel
+				PanelName.Parent = NewPanel.Gui
 				PanelName.TextSize = 16
 				PanelName.TextXAlignment = Enum.TextXAlignment.Left
 				PanelName.TextYAlignment = Enum.TextYAlignment.Bottom
@@ -284,25 +290,26 @@ function Lithium:MakeWindow(info)
                     if not NewToggle.Flag then NewToggle.Flag = NewToggle.Text end
 					
 					-- Slider UI
-					local Toggle = Instance.new("TextButton")
-					Toggle.Name = NewToggle.Text
-					Toggle.BackgroundColor3 = info.Theme.ZIndex2Col
-					Toggle.BorderSizePixel = 0
-					Toggle.Size = UDim2.new(1, 0, 0, 20)
-					Toggle.TextColor3 = Color3.new(1,1,1)
-					Toggle.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
-					Toggle.Text = NewToggle.Text
-					Toggle.TextXAlignment = Enum.TextXAlignment.Left
-					Toggle.TextSize = 14
-					Toggle.Parent = PanelContainer
-					Toggle.AutoButtonColor = false
+					NewToggle.Gui = Instance.new("TextLabel")
+					NewToggle.Gui.Name = NewToggle.Text
+					NewToggle.Gui.BackgroundColor3 = info.Theme.ZIndex2Col
+					NewToggle.Gui.BorderSizePixel = 0
+					NewToggle.Gui.Size = UDim2.new(1, 0, 0, 20)
+					NewToggle.Gui.TextColor3 = Color3.new(1,1,1)
+					NewToggle.Gui.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
+					NewToggle.Gui.Text = NewToggle.Text
+					NewToggle.Gui.TextXAlignment = Enum.TextXAlignment.Left
+					NewToggle.Gui.TextSize = 14
+					NewToggle.Gui.Parent = PanelContainer
 					
-					local ToggleIndicator = Instance.new("ImageLabel")
-					ToggleIndicator.Position = UDim2.new(0.842, 0,0.25, 0)
+					local ToggleIndicator = Instance.new("ImageButton")
+					ToggleIndicator.Position = UDim2.new(0.92, 0,0.25, 0)
 					ToggleIndicator.Size = UDim2.new(0.059, 0,0.75, 0)
 					ToggleIndicator.BackgroundColor3 = info.Theme.UIAccents
 					ToggleIndicator.BorderSizePixel = 0
-					ToggleIndicator.Parent = Toggle
+					ToggleIndicator.Parent = NewToggle.Gui
+					ToggleIndicator.Name = "Indicator"
+					ToggleIndicator.AutoButtonColor = false
 					
 					local IndicatorOutline = Instance.new("UIStroke")
 					IndicatorOutline.Parent = ToggleIndicator
@@ -334,7 +341,7 @@ function Lithium:MakeWindow(info)
 					end
 					
 					-- Connect Toggle
-					Toggle.Activated:Connect(function()
+					ToggleIndicator.Activated:Connect(function()
 						NewToggle:SetValue(not NewToggle.Value)
 					end)
 					
@@ -362,18 +369,18 @@ function Lithium:MakeWindow(info)
 					NewSlider.Inc = math.clamp(NewSlider.Inc, 0.001, 1)
 					
 					-- Slider UI
-					local Slider = Instance.new("Frame")
-					Slider.Name = NewSlider.Text
-					Slider.BackgroundColor3 = info.Theme.ZIndex2Col
-					Slider.BorderSizePixel = 0
-					Slider.Size = UDim2.new(1, 0, 0, 40)
-					Slider.Parent = PanelContainer
+					NewSlider.Gui = Instance.new("Frame")
+					NewSlider.Gui.Name = NewSlider.Text
+					NewSlider.Gui.BackgroundColor3 = info.Theme.ZIndex2Col
+					NewSlider.Gui.BorderSizePixel = 0
+					NewSlider.Gui.Size = UDim2.new(1, 0, 0, 40)
+					NewSlider.Gui.Parent = PanelContainer
 					
 					local SliderText = Instance.new("TextLabel")
 					SliderText.Name = "Text"
 					SliderText.BackgroundTransparency = 1
 					SliderText.Size = UDim2.new(0.688, 0,0.5, 0)
-					SliderText.Parent = Slider
+					SliderText.Parent = NewSlider.Gui
 					SliderText.TextColor3 = Color3.new(1,1,1)
 					SliderText.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
 					SliderText.Text = NewSlider.Text
@@ -381,22 +388,22 @@ function Lithium:MakeWindow(info)
 					SliderText.TextSize = 14
 					
 					local SliderValue = Instance.new("TextLabel")
-					SliderValue.Name = "Value"
+					SliderValue.Name = "Indicator"
 					SliderValue.BackgroundTransparency = 1
 					SliderValue.Size = UDim2.new(0.287, 0,0.5, 0)
-					SliderValue.Position = UDim2.new(0.713, 0, 0, 0)
-					SliderValue.Parent = Slider
+					SliderValue.Position = UDim2.new(0.7, 0, 0, 0)
+					SliderValue.Parent = NewSlider.Gui
 					SliderValue.TextColor3 = Color3.new(1,1,1)
 					SliderValue.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
 					SliderValue.Text = tostring(NewSlider.Def)
-					SliderValue.TextXAlignment = Enum.TextXAlignment.Left
+					SliderValue.TextXAlignment = Enum.TextXAlignment.Right
 					SliderValue.TextSize = 14
 					
 					local SliderContainer = Instance.new("Frame")
 					SliderContainer.BackgroundColor3 = info.Theme.ZIndex3Col
 					SliderContainer.Position = UDim2.new(0.053, 0,0.675, 0)
 					SliderContainer.Size = UDim2.new(0.888, 0,0.15, 0)
-					SliderContainer.Parent = Slider
+					SliderContainer.Parent = NewSlider.Gui
 					
 					local SliderContainerCorner = Instance.new("UICorner")
 					SliderContainerCorner.CornerRadius = UDim.new(1, 0)
@@ -473,6 +480,7 @@ function Lithium:MakeWindow(info)
 						Handle.Size = UDim2.new(0, 3, 0, 3)
 						Handle.BackgroundColor3 = Color3.new(1,1,1)
 						Handle.AnchorPoint = Vector2.new(0, 0)
+                        Handle.ZIndex = 5
 
 						local HandleCorner = Instance.new("UICorner")
 						HandleCorner.Parent = Handle
@@ -493,24 +501,26 @@ function Lithium:MakeWindow(info)
 					end
 					
 					-- Color Picker UI
-					local ColorPicker = Instance.new("TextLabel")
-					ColorPicker.Name = NewColorPicker.Text
-					ColorPicker.BackgroundColor3 = info.Theme.ZIndex2Col
-					ColorPicker.BorderSizePixel = 0
-					ColorPicker.Size = UDim2.new(1, 0, 0, 20)
-					ColorPicker.TextColor3 = Color3.new(1,1,1)
-					ColorPicker.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
-					ColorPicker.Text = NewColorPicker.Text
-					ColorPicker.TextXAlignment = Enum.TextXAlignment.Left
-					ColorPicker.TextSize = 14
-					ColorPicker.Parent = PanelContainer
+					NewColorPicker.Gui = Instance.new("TextLabel")
+					NewColorPicker.Gui.Name = NewColorPicker.Text
+					NewColorPicker.Gui.BackgroundColor3 = info.Theme.ZIndex2Col
+					NewColorPicker.Gui.BorderSizePixel = 0
+					NewColorPicker.Gui.Size = UDim2.new(1, 0, 0, 20)
+					NewColorPicker.Gui.TextColor3 = Color3.new(1,1,1)
+					NewColorPicker.Gui.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
+					NewColorPicker.Gui.Text = NewColorPicker.Text
+					NewColorPicker.Gui.TextXAlignment = Enum.TextXAlignment.Left
+					NewColorPicker.Gui.TextSize = 14
+					NewColorPicker.Gui.Parent = PanelContainer
 					
 					local ColorIndicator = Instance.new("ImageButton")
-					ColorIndicator.Position = UDim2.new(0.842, 0,0.25, 0)
+					ColorIndicator.Position = UDim2.new(0.92, 0,0.25, 0)
 					ColorIndicator.Size = UDim2.new(0.059, 0,0.75, 0)
 					ColorIndicator.BackgroundColor3 = NewColorPicker.Value
 					ColorIndicator.BorderSizePixel = 0
-					ColorIndicator.Parent = ColorPicker
+					ColorIndicator.Parent = NewColorPicker.Gui
+					ColorIndicator.Name = "Indicator"
+					ColorIndicator.AutoButtonColor = false
 
 					local IndicatorOutline = Instance.new("UIStroke")
 					IndicatorOutline.Parent = ColorIndicator
@@ -523,12 +533,15 @@ function Lithium:MakeWindow(info)
 					IndicatorAspectRatio.Parent = ColorIndicator
 					
 					local ColorPickerFrame = Instance.new("Frame")
-					ColorPickerFrame.Parent = ColorPicker
+					ColorPickerFrame.Parent = ColorIndicator
 					ColorPickerFrame.BackgroundColor3 = info.Theme.ZIndex4Col
 					ColorPickerFrame.BorderSizePixel = 0
-					ColorPickerFrame.Position = UDim2.new(0, 0, 1, 0)
-					ColorPickerFrame.Size = UDim2.new(1, 0, 7, 0)
+					ColorPickerFrame.AnchorPoint = Vector2.new(1, 0)
+					ColorPickerFrame.Position = UDim2.new(1, 0, 1, 0)
+					ColorPickerFrame.Size = UDim2.new(0, NewColorPicker.Gui.AbsoluteSize.X, 12, 0)
 					ColorPickerFrame.Visible = false
+                    ColorPickerFrame.ZIndex = 2
+					ColorPickerFrame.Name = "ColorPickerFrame"
 					
 					-- Hue
 					local Hue = Instance.new("Frame")
@@ -538,6 +551,7 @@ function Lithium:MakeWindow(info)
 					Hue.Size = UDim2.new(0.66, 0,0.916, 0)
 					Hue.BorderSizePixel = 0
 					Hue.BackgroundColor3 = Color3.new(1,1,1)
+                    Hue.ZIndex = 3
 					
 					local HueGradient = Instance.new("UIGradient")
 					HueGradient.Parent = Hue
@@ -559,7 +573,7 @@ function Lithium:MakeWindow(info)
 					Saturation.Position = UDim2.new(0.053, 0,0.069, 0)
 					Saturation.Size = UDim2.new(0.66, 0,0.916, 0)
 					Saturation.BorderSizePixel = 0
-					Saturation.ZIndex = 2
+					Saturation.ZIndex = 4
 					Saturation.BackgroundColor3 = Color3.new(1,1,1)
 					Saturation.AutoButtonColor = false
 					
@@ -581,6 +595,7 @@ function Lithium:MakeWindow(info)
 					Value.BorderSizePixel = 0
 					Value.BackgroundColor3 = Color3.new(1,1,1)
 					Value.AutoButtonColor = false
+                    Value.ZIndex = 3
 					
 					local ValueGradient = Instance.new("UIGradient")
 					ValueGradient.Parent = Value
@@ -613,6 +628,13 @@ function Lithium:MakeWindow(info)
 					-- Connect Color Picker
 					ColorIndicator.Activated:Connect(function()
 						ColorPickerFrame.Visible = not ColorPickerFrame.Visible
+
+                        -- if another color picker is open we should first close it
+                        if LithiumUI.CurrentColorPicker and LithiumUI.CurrentColorPicker ~= ColorPickerFrame then
+                            LithiumUI.CurrentColorPicker.Visible = false
+                        end
+
+						LithiumUI.CurrentColorPicker = ColorPickerFrame
 					end)
 					
 					Saturation.MouseButton1Down:Connect(function()
@@ -665,30 +687,30 @@ function Lithium:MakeWindow(info)
                     if not NewSeparator.Text then NewSeparator.Text = "NewSeparator" end
 
                     -- Separator UI
-                    local Separator = Instance.new("TextLabel")
-                    Separator.Parent = PanelContainer
-                    Separator.BackgroundTransparency = 1
-                    Separator.Size = UDim2.new(1, 0, 0, 30)
-                    Separator.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
-                    Separator.TextColor3 = Color3.new(1,1,1)
-                    Separator.TextStrokeColor3 = info.Theme.ZIndex4Col
-                    Separator.TextStrokeTransparency = 0
-                    Separator.TextSize = 14
-                    Separator.Text = NewSeparator.Text
+                    NewSeparator.Gui = Instance.new("TextLabel")
+                    NewSeparator.Gui.Parent = PanelContainer
+                    NewSeparator.Gui.BackgroundTransparency = 1
+                    NewSeparator.Gui.Size = UDim2.new(1, 0, 0, 30)
+                    NewSeparator.Gui.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
+                    NewSeparator.Gui.TextColor3 = Color3.new(1,1,1)
+                    NewSeparator.Gui.TextStrokeColor3 = info.Theme.ZIndex4Col
+                    NewSeparator.Gui.TextStrokeTransparency = 0
+                    NewSeparator.Gui.TextSize = 14
+                    NewSeparator.Gui.Text = NewSeparator.Text
 
                     local Line1 = Instance.new("Frame")
                     Line1.BorderColor3 = info.Theme.ZIndex4Col
                     Line1.BorderSizePixel = 1
-                    Line1.Size = UDim2.new(0.5, -(Separator.TextBounds.X * 0.5) - 5, 0, 0)
+                    Line1.Size = UDim2.new(0.5, -(NewSeparator.Gui.TextBounds.X * 0.5 + 15), 0, 0)
                     Line1.Position = UDim2.new(0, 0, 0.5, 0)
-                    Line1.Parent = Separator
+                    Line1.Parent = NewSeparator.Gui
 
                     local Line2 = Instance.new("Frame")
                     Line2.BorderColor3 = info.Theme.ZIndex4Col
                     Line2.BorderSizePixel = 1
-                    Line2.Size = UDim2.new(0.5, -Separator.TextBounds.X * 0.5 - 5, 0, 0)
-                    Line2.Position = UDim2.new(0.5, Separator.TextBounds.X * 0.5 + 5, 0.5, 0)
-                    Line2.Parent = Separator
+                    Line2.Size = UDim2.new(0.5, -(NewSeparator.Gui.TextBounds.X * 0.5 + 15), 0, 0)
+                    Line2.Position = UDim2.new(0.5, NewSeparator.Gui.TextBounds.X * 0.5 + 15, 0.5, 0)
+                    Line2.Parent = NewSeparator.Gui
 
                     return NewSeparator
                 end
@@ -703,7 +725,7 @@ function Lithium:MakeWindow(info)
 						end
 					end
 
-					Panel.Size = UDim2.new(1, 0, 0, totalSize)
+					NewPanel.Gui.Size = UDim2.new(1, 0, 0, totalSize)
 				end
 				
 				PanelContainer.ChildAdded:Connect(UpdateSize)
