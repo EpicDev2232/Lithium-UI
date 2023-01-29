@@ -163,8 +163,9 @@ function Lithium:MakeWindow(info)
 			
 			local Container = Instance.new("ScrollingFrame")
 			Container.Name = tabInfo.Name
-			Container.Position = UDim2.new(0, 5,0.101, 0)
-			Container.Size = UDim2.new(0.971, 0,0.887, 0)
+			Container.AnchorPoint = Vector2.new(0.5, 0)
+			Container.Position = UDim2.new(0.5, 0, 0, 0)
+			Container.Size = UDim2.new(1, -10,0.887, 0)
 			Container.BackgroundTransparency = 1
 			Container.Parent = Containers
             Container.BorderSizePixel = 0
