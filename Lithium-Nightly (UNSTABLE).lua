@@ -177,7 +177,7 @@ function Lithium:MakeWindow(info)
 			for i = 1,2 do
 				local NewColumn = Instance.new("Frame")
 				NewColumn.BackgroundTransparency = 1
-				NewColumn.Size = UDim2.new(0.49, 0,1, 0)
+				NewColumn.Size = UDim2.new(0.5, -2.5,1, 0)
 				NewColumn.Parent = Container
 				
 				local NewListLayout = Instance.new("UIListLayout")
@@ -190,7 +190,7 @@ function Lithium:MakeWindow(info)
 				else
 					RightColumn = NewColumn
 					RightColumn.Name = "RightColumn"
-					RightColumn.Position = UDim2.new(0.508, 0, 0, 0)
+					RightColumn.Position = UDim2.new(0.5, 2.5, 0, 0)
 				end
 				
 				NewColumn = nil
