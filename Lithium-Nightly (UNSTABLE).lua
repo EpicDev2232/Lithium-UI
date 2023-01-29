@@ -531,6 +531,13 @@ function Lithium:MakeWindow(info)
 					ColorPickerFrame.Size = UDim2.new(1, 0, 7, 0)
 					ColorPickerFrame.Visible = false
                     ColorPickerFrame.ZIndex = 2
+
+                    -- if another color picker is open we should first close it
+                    if LithiumUI.CurrentColorPicker then
+                        LithiumUI.CurrentColorPicker.Visible = false
+                    end
+
+                    LithiumUI.CurrentColorPicker = ColorPickerFrame
 					
 					-- Hue
 					local Hue = Instance.new("Frame")
