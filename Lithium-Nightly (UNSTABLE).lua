@@ -246,8 +246,8 @@ function Lithium:MakeWindow(info)
 				
 				local PanelContainer = Instance.new("Frame")
 				PanelContainer.BackgroundTransparency = 1
-				PanelContainer.Position = UDim2.new(0, 0, 0, 25)
-				PanelContainer.Size = UDim2.new(1, 0,1, -30)
+				PanelContainer.Position = UDim2.new(0, 2.5, 0, 25)
+				PanelContainer.Size = UDim2.new(1, -5 ,1, -30)
 				PanelContainer.Parent = NewPanel.PanelGui
 				PanelContainer.Name = "Container"
 				
