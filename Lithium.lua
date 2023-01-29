@@ -281,6 +281,7 @@ function Lithium:MakeWindow(info)
 					-- Default Values
 					if not NewToggle.Text then NewToggle.Text = "NewToggle" end
 					if not NewToggle.Value then NewToggle.Value = false end
+                    if not NewToggle.Flag then NewToggle.Flag = NewToggle.Text end
 					
 					-- Slider UI
 					local Toggle = Instance.new("TextButton")
@@ -356,6 +357,7 @@ function Lithium:MakeWindow(info)
 					if not NewSlider.Max then NewSlider.Max = 100 end
 					if not NewSlider.Inc then NewSlider.Inc = 1 end
 					if not NewSlider.Value then NewSlider.Value = NewSlider.Min end
+                    if not NewSlider.Flag then NewSlider.Flag = NewSlider.Text end
 					
 					NewSlider.Inc = math.clamp(NewSlider.Inc, 0.001, 1)
 					
@@ -458,10 +460,11 @@ function Lithium:MakeWindow(info)
 					
 					-- Default Values
 					if not NewColorPicker.Text then NewColorPicker.Text = "NewColorPicker" end
-					if not NewColorPicker.Value then NewColorPicker.Value = Color3.new() end
+					if not NewColorPicker.Value then NewColorPicker.Value = Color3.new(1,1,1) end
 					if not (NewColorPicker.H or NewColorPicker.S or NewColorPicker.V) then
 						NewColorPicker.H, NewColorPicker.S, NewColorPicker.V = NewColorPicker.Value:ToHSV()
 					end
+                    if not NewColorPicker.Flag then NewColorPicker.Flag = NewColorPicker.Text end
 					
 					-- Misc Functions
 					local function CreateHandle(frame)
