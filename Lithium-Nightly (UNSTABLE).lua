@@ -537,7 +537,7 @@ function Lithium:MakeWindow(info)
 					ColorPickerFrame.BorderSizePixel = 0
 					ColorPickerFrame.AnchorPoint = Vector2.new(1, 0)
 					ColorPickerFrame.Position = UDim2.new(1, 0, 1, 0)
-					ColorPickerFrame.Size = UDim2.new(0, NewColorPicker.Gui.AbsoluteSize.X, 8, 0)
+					ColorPickerFrame.Size = UDim2.new(0, NewColorPicker.Gui.AbsoluteSize.X, 12, 0)
 					ColorPickerFrame.Visible = false
                     ColorPickerFrame.ZIndex = 2
 					ColorPickerFrame.Name = "ColorPickerFrame"
