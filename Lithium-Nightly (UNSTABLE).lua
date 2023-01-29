@@ -165,8 +165,8 @@ function Lithium:MakeWindow(info)
 			local Container = Instance.new("ScrollingFrame")
 			Container.Name = tabInfo.Name
 			Container.AnchorPoint = Vector2.new(0.5, 0)
-			Container.Position = UDim2.new(0.5, 0, 0, 5)
-			Container.Size = UDim2.new(1, -10, 1, -70)
+			Container.Position = UDim2.new(0.5, 0, 0, 2.5)
+			Container.Size = UDim2.new(1, -5, 1, -70)
 			Container.BackgroundTransparency = 1
 			Container.Parent = Containers
             Container.BorderSizePixel = 0
@@ -242,11 +242,12 @@ function Lithium:MakeWindow(info)
 				NewPanel.PanelGui.BackgroundColor3 = info.Theme.ZIndex3Col
 				NewPanel.PanelGui.BorderSizePixel = 0
 				NewPanel.PanelGui.Parent = Container:FindFirstChild(panelInfo.Side.. "Column")
+				NewPanel.PanelGui.Size = UDim2.new(1, 0, 0, 0)
 				
 				local PanelContainer = Instance.new("Frame")
 				PanelContainer.BackgroundTransparency = 1
-				PanelContainer.Position = UDim2.new(0.019, 0, 0, 25)
-				PanelContainer.Size = UDim2.new(0.961, 0,1, -30)
+				PanelContainer.Position = UDim2.new(0, 0, 0, 25)
+				PanelContainer.Size = UDim2.new(1, 0,1, -30)
 				PanelContainer.Parent = NewPanel.PanelGui
 				PanelContainer.Name = "Container"
 				
