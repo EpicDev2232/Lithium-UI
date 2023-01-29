@@ -61,7 +61,6 @@ function Lithium:MakeWindow(info)
 		UIContainer.ResetOnSpawn = false
 		UIContainer.IgnoreGuiInset = true
 		UIContainer.Parent = CoreGui
-        UIContainer.ZIndexBehaviour = "Sibling"
 		
 		-- Default Values
 		if not info.Title then info.Title = "Lithium" end
