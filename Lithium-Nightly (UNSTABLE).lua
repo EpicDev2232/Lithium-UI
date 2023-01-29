@@ -309,6 +309,7 @@ function Lithium:MakeWindow(info)
 					ToggleIndicator.BackgroundColor3 = info.Theme.UIAccents
 					ToggleIndicator.BorderSizePixel = 0
 					ToggleIndicator.Parent = NewToggle.ToggleGui
+					ToggleIndicator.Name = "ToggleInficator"
 					
 					local IndicatorOutline = Instance.new("UIStroke")
 					IndicatorOutline.Parent = ToggleIndicator
@@ -518,6 +519,7 @@ function Lithium:MakeWindow(info)
 					ColorIndicator.BackgroundColor3 = NewColorPicker.Value
 					ColorIndicator.BorderSizePixel = 0
 					ColorIndicator.Parent = NewColorPicker.ColorPickerGui
+					ColorIndicator.Name = "ColorIndicator"
 
 					local IndicatorOutline = Instance.new("UIStroke")
 					IndicatorOutline.Parent = ColorIndicator
@@ -530,13 +532,15 @@ function Lithium:MakeWindow(info)
 					IndicatorAspectRatio.Parent = ColorIndicator
 					
 					local ColorPickerFrame = Instance.new("Frame")
-					ColorPickerFrame.Parent = NewColorPicker.ColorPickerGui
+					ColorPickerFrame.Parent = ColorIndicator
 					ColorPickerFrame.BackgroundColor3 = info.Theme.ZIndex4Col
 					ColorPickerFrame.BorderSizePixel = 0
-					ColorPickerFrame.Position = UDim2.new(0, 0, 1, 0)
-					ColorPickerFrame.Size = UDim2.new(1, 0, 7, 0)
+					ColorPickerFrame.AnchorPoint = Vector2.new(1, 0)
+					ColorPickerFrame.Position = UDim2.new(1, 0, 1, 0)
+					ColorPickerFrame.Size = UDim2.new(0, NewColorPicker.ColorPickerGui.AbsoluteSize.X, 8, 0)
 					ColorPickerFrame.Visible = false
                     ColorPickerFrame.ZIndex = 2
+					ColorPickerFrame.Name = "ColorPickerFrame"
 					
 					-- Hue
 					local Hue = Instance.new("Frame")
