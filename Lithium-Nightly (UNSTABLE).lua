@@ -290,7 +290,7 @@ function Lithium:MakeWindow(info)
                     if not NewToggle.Flag then NewToggle.Flag = NewToggle.Text end
 					
 					-- Slider UI
-					NewToggle.Gui = Instance.new("TextButton")
+					NewToggle.Gui = Instance.new("TextLabel")
 					NewToggle.Gui.Name = NewToggle.Text
 					NewToggle.Gui.BackgroundColor3 = info.Theme.ZIndex2Col
 					NewToggle.Gui.BorderSizePixel = 0
@@ -301,15 +301,15 @@ function Lithium:MakeWindow(info)
 					NewToggle.Gui.TextXAlignment = Enum.TextXAlignment.Left
 					NewToggle.Gui.TextSize = 14
 					NewToggle.Gui.Parent = PanelContainer
-					NewToggle.Gui.AutoButtonColor = false
 					
-					local ToggleIndicator = Instance.new("ImageLabel")
+					local ToggleIndicator = Instance.new("ImageButton")
 					ToggleIndicator.Position = UDim2.new(0.92, 0,0.25, 0)
 					ToggleIndicator.Size = UDim2.new(0.059, 0,0.75, 0)
 					ToggleIndicator.BackgroundColor3 = info.Theme.UIAccents
 					ToggleIndicator.BorderSizePixel = 0
 					ToggleIndicator.Parent = NewToggle.Gui
 					ToggleIndicator.Name = "Indicator"
+					ToggleIndicator.AutoButtonColor = false
 					
 					local IndicatorOutline = Instance.new("UIStroke")
 					IndicatorOutline.Parent = ToggleIndicator
@@ -341,7 +341,7 @@ function Lithium:MakeWindow(info)
 					end
 					
 					-- Connect Toggle
-					NewToggle.Gui.Activated:Connect(function()
+					ToggleIndicator.Activated:Connect(function()
 						NewToggle:SetValue(not NewToggle.Value)
 					end)
 					
@@ -520,6 +520,7 @@ function Lithium:MakeWindow(info)
 					ColorIndicator.BorderSizePixel = 0
 					ColorIndicator.Parent = NewColorPicker.Gui
 					ColorIndicator.Name = "Indicator"
+					ColorIndicator.AutoButtonColor = false
 
 					local IndicatorOutline = Instance.new("UIStroke")
 					IndicatorOutline.Parent = ColorIndicator
@@ -632,7 +633,7 @@ function Lithium:MakeWindow(info)
                         if LithiumUI.CurrentColorPicker and LithiumUI.CurrentColorPicker ~= ColorPickerFrame then
                             LithiumUI.CurrentColorPicker.Visible = false
                         end
-						
+
 						LithiumUI.CurrentColorPicker = ColorPickerFrame
 					end)
 					
