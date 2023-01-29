@@ -341,7 +341,7 @@ function Lithium:MakeWindow(info)
 					end
 					
 					-- Connect Toggle
-					NewToggle.ToggleGui.Activated:Connect(function()
+					NewToggle.Gui.Activated:Connect(function()
 						NewToggle:SetValue(not NewToggle.Value)
 					end)
 					
