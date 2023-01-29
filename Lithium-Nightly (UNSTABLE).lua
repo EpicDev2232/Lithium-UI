@@ -629,15 +629,11 @@ function Lithium:MakeWindow(info)
 						ColorPickerFrame.Visible = not ColorPickerFrame.Visible
 
                         -- if another color picker is open we should first close it
-                        if LithiumUI.CurrentColorPicker then
+                        if LithiumUI.CurrentColorPicker and LithiumUI.CurrentColorPicker ~= ColorPickerFrame then
                             LithiumUI.CurrentColorPicker.Visible = false
                         end
-
-						if ColorPickerFrame.Visible == false then
-							LithiumUI.CurrentColorPicker = nil
-						else
-							LithiumUI.CurrentColorPicker = ColorPickerFrame
-						end
+						
+						LithiumUI.CurrentColorPicker = ColorPickerFrame
 					end)
 					
 					Saturation.MouseButton1Down:Connect(function()
