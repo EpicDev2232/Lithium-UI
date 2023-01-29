@@ -222,7 +222,7 @@ function Lithium:MakeWindow(info)
 			TabOutline.LineJoinMode = Enum.LineJoinMode.Bevel
 			
 			TabButton.Activated:Connect(function()
-				for _, OtherContainer in Containers:GetChildren() do
+				for _, OtherContainer in pairs(Containers:GetChildren()) do
 					OtherContainer.Visible = false
 				end
 				
@@ -373,7 +373,7 @@ function Lithium:MakeWindow(info)
 					NewSlider.SliderGui.BackgroundColor3 = info.Theme.ZIndex2Col
 					NewSlider.SliderGui.BorderSizePixel = 0
 					NewSlider.SliderGui.Size = UDim2.new(1, 0, 0, 40)
-					SNewSlider.SliderGui.Parent = PanelContainer
+					NewSlider.SliderGui.Parent = PanelContainer
 					
 					local SliderText = Instance.new("TextLabel")
 					SliderText.Name = "Text"
