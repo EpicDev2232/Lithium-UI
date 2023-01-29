@@ -309,7 +309,7 @@ function Lithium:MakeWindow(info)
 					ToggleIndicator.BackgroundColor3 = info.Theme.UIAccents
 					ToggleIndicator.BorderSizePixel = 0
 					ToggleIndicator.Parent = NewToggle.ToggleGui
-					ToggleIndicator.Name = "ToggleInficator"
+					ToggleIndicator.Name = "ToggleIndicator"
 					
 					local IndicatorOutline = Instance.new("UIStroke")
 					IndicatorOutline.Parent = ToggleIndicator
