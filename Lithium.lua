@@ -69,6 +69,14 @@ function Lithium:MakeWindow(info)
 		if typeof(info.Theme) == "string" then
 			info.Theme = Themes[info.Theme]
 		end
+
+        -- Mouse Unlock
+        local MouseUnlock = Instance.new("ImageButton")
+        MouseUnlock.BackgroundTransparency = 1
+        MouseUnlock.Parent = UIContainer
+        MouseUnlock.Size = UDim2.new(1,0,1,0)
+        MouseUnlock.Position = UDim2.new()
+        MouseUnlock.Modal = true
 		
 		-- Window
 		local Frame = Instance.new("Frame")
@@ -76,7 +84,7 @@ function Lithium:MakeWindow(info)
 		Frame.BackgroundColor3 = info.Theme.BackgroundCol
 		Frame.BorderSizePixel = 0
 		Frame.ClipsDescendants = true
-		Frame.Position = UDim2.new(0.5, 0, 0.5, 0)
+		Frame.Position = UDim2.new(0, 0, 0, 0)
 		Frame.Size = UDim2.new(0, 377, 0, 576)
 		
 		local Containers = Instance.new("Frame")
@@ -240,6 +248,7 @@ function Lithium:MakeWindow(info)
 				local PanelListLayout = Instance.new("UIListLayout")
 				PanelListLayout.Parent = PanelContainer
 				PanelListLayout.Padding = UDim.new(0, 4)
+                PanelListLayout.SortOrder = Enum.SortOrder.LayoutOrder
 				
 				local PanelName = Instance.new("TextLabel")
 				PanelName.Name = "Title"
@@ -645,6 +654,41 @@ function Lithium:MakeWindow(info)
 					
 					return NewColorPicker
 				end
+
+                function NewPanel:MakeSeparator(separatorInfo)
+                    local NewSeparator = separatorInfo
+
+                    -- Default Values
+                    if not NewSeparator.Text then NewSeparator.Text = "NewSeparator" end
+
+                    -- Separator UI
+                    local Separator = Instance.new("TextLabel")
+                    Separator.Parent = PanelContainer
+                    Separator.BackgroundTransparency = 1
+                    Separator.Size = UDim2.new(1, 0, 0, 30)
+                    Separator.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
+                    Separator.TextColor3 = Color3.new(1,1,1)
+                    Separator.TextStrokeColor3 = info.Theme.ZIndex4Col
+                    Separator.TextStrokeTransparency = 0
+                    Separator.TextSize = 14
+                    Separator.Text = NewSeparator.Text
+
+                    local Line1 = Instance.new("Frame")
+                    Line1.BorderColor3 = info.Theme.ZIndex4Col
+                    Line1.BorderSizePixel = 1
+                    Line1.Size = UDim2.new(0.5, -(Separator.TextBounds.X * 0.5) - 5, 0, 0)
+                    Line1.Position = UDim2.new(0, 0, 0.5, 0)
+                    Line1.Parent = Separator
+
+                    local Line2 = Instance.new("Frame")
+                    Line2.BorderColor3 = info.Theme.ZIndex4Col
+                    Line2.BorderSizePixel = 1
+                    Line2.Size = UDim2.new(0.5, -Separator.TextBounds.X * 0.5 - 5, 0, 0)
+                    Line2.Position = UDim2.new(0.5, Separator.TextBounds.X * 0.5 + 5, 0.5, 0)
+                    Line2.Parent = Separator
+
+                    return NewSeparator
+                end
 				
 				-- extend panel
 				local function UpdateSize()
@@ -652,7 +696,7 @@ function Lithium:MakeWindow(info)
 
 					for _, child in pairs(PanelContainer:GetChildren()) do
 						if child:IsA("Frame") or child:IsA("TextButton") or child:IsA("TextLabel") then
-							totalSize += child.AbsoluteSize.Y + PanelListLayout.Padding.Offset
+							totalSize = totalSize + child.AbsoluteSize.Y + PanelListLayout.Padding.Offset
 						end
 					end
 
@@ -692,6 +736,8 @@ function Lithium:MakeWindow(info)
 		UserInputService.InputBegan:Connect(function(input)
 			if input.KeyCode == Enum.KeyCode.RightShift then
 				UIContainer.Enabled = not UIContainer.Enabled
+
+                UserInputService.MouseCursorEnabled = UIContainer.Enabled
 			end
 		end)
 		
