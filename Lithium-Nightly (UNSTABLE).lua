@@ -633,7 +633,11 @@ function Lithium:MakeWindow(info)
                             LithiumUI.CurrentColorPicker.Visible = false
                         end
 
-                        LithiumUI.CurrentColorPicker = ColorPickerFrame
+						if ColorPickerFrame.Visible == false then
+							LithiumUI.CurrentColorPicker = nil
+						else
+							LithiumUI.CurrentColorPicker = ColorPickerFrame
+						end
 					end)
 					
 					Saturation.MouseButton1Down:Connect(function()
