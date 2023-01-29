@@ -61,7 +61,7 @@ function Lithium:MakeWindow(info)
 		UIContainer.ResetOnSpawn = false
 		UIContainer.IgnoreGuiInset = true
 		UIContainer.Parent = CoreGui
-        UIContainer.ZIndexBehaviour = Enum.ZIndexBehaviour.Sibling
+        UIContainer.ZIndexBehaviour = "Sibling"
 		
 		-- Default Values
 		if not info.Title then info.Title = "Lithium" end
@@ -385,12 +385,12 @@ function Lithium:MakeWindow(info)
 					SliderValue.Name = "Value"
 					SliderValue.BackgroundTransparency = 1
 					SliderValue.Size = UDim2.new(0.287, 0,0.5, 0)
-					SliderValue.Position = UDim2.new(0.713, 0, 0, 0)
+					SliderValue.Position = UDim2.new(0.7, 0, 0, 0)
 					SliderValue.Parent = Slider
 					SliderValue.TextColor3 = Color3.new(1,1,1)
 					SliderValue.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
 					SliderValue.Text = tostring(NewSlider.Def)
-					SliderValue.TextXAlignment = Enum.TextXAlignment.Left
+					SliderValue.TextXAlignment = Enum.TextXAlignment.Right
 					SliderValue.TextSize = 14
 					
 					local SliderContainer = Instance.new("Frame")
