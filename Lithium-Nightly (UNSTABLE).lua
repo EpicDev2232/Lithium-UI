@@ -474,6 +474,7 @@ function Lithium:MakeWindow(info)
 						Handle.Size = UDim2.new(0, 3, 0, 3)
 						Handle.BackgroundColor3 = Color3.new(1,1,1)
 						Handle.AnchorPoint = Vector2.new(0, 0)
+                        Handle.ZIndex = 5
 
 						local HandleCorner = Instance.new("UICorner")
 						HandleCorner.Parent = Handle
