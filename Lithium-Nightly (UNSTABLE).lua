@@ -70,6 +70,23 @@ function Lithium:MakeWindow(info)
 			info.Theme = Themes[info.Theme]
 		end
 
+		-- Mouse Cursor
+		local MouseCursor = Instance.new("Frame")
+		MouseCursor.Parent = UIContainer
+		MouseCursor.Size = UDim2.new(0, 3, 0, 3)
+		MouseCursor.BackgroundColor3 = Color3.new(1,1,1)
+		MouseCursor.AnchorPoint = Vector2.new(0, 0)
+		MouseCursor.ZIndex = 5
+
+		local HandleCorner = Instance.new("UICorner")
+		HandleCorner.Parent = Handle
+		HandleCorner.CornerRadius = UDim.new(1, 0)
+
+		local HandleOutline = Instance.new("UIStroke")
+		HandleOutline.Parent = Handle
+		HandleOutline.Thickness = 2
+		HandleOutline.Color = info.Theme.ZIndex3Col
+
         -- Mouse Unlock
         local MouseUnlock = Instance.new("ImageButton")
         MouseUnlock.BackgroundTransparency = 1
@@ -726,6 +743,7 @@ function Lithium:MakeWindow(info)
 					end
 
 					NewPanel.Gui.Size = UDim2.new(1, 0, 0, totalSize)
+					totalSize = nil
 				end
 				
 				PanelContainer.ChildAdded:Connect(UpdateSize)
@@ -743,6 +761,13 @@ function Lithium:MakeWindow(info)
 			
 			return NewTab
 		end
+
+		-- Connect Mouse Cursor
+		RunService:BindToRenderStep("LithiumMouseCursor", 1, function()
+			local mousePos = UserInputService:GetMouseLocation()
+			MouseCursor.Position = UDim2.new(0, mousePos.X, 0, mousePos.Y)
+			mousePos = nil
+		end)
 		
 		-- Connect Window
 		Topbar.InputBegan:Connect(function(input)
@@ -752,17 +777,17 @@ function Lithium:MakeWindow(info)
 				
 				RunService:BindToRenderStep("DragLithiumWindow", 1, function()
 					mousePos = UserInputService:GetMouseLocation()
-					
 					Frame.Position = UDim2.new(0, mousePos.X, 0, mousePos.Y) + UDim2.new(0, offset.X, 0, offset.Y)
 				end)
+
+				mousePos = nil
+				offset = nil
 			end
 		end)
 		
 		UserInputService.InputBegan:Connect(function(input)
 			if input.KeyCode == Enum.KeyCode.RightShift then
 				UIContainer.Enabled = not UIContainer.Enabled
-
-                UserInputService.MouseCursorEnabled = UIContainer.Enabled
 			end
 		end)
 		
@@ -779,6 +804,8 @@ function Lithium:MakeWindow(info)
 			if flag then
 				return flag
 			end
+
+			flag = nil
 		end
 		
 		return LithiumUI
