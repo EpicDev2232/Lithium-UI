@@ -77,6 +77,7 @@ function Lithium:MakeWindow(info)
 		MouseCursor.BackgroundColor3 = Color3.new(1,1,1)
 		MouseCursor.AnchorPoint = Vector2.new(0, 0)
 		MouseCursor.ZIndex = 5
+		MouseCursor.Active = false
 
 		local CursorCorner = Instance.new("UICorner")
 		CursorCorner.Parent = MouseCursor
