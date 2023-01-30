@@ -787,20 +787,9 @@ function Lithium:MakeWindow(info)
 			end
 		end)
 		
-		local lastIcon = Mouse.Icon
-		local lastEnabled = UserInputService.MouseIconEnabled
 		UserInputService.InputBegan:Connect(function(input)
 			if input.KeyCode == Enum.KeyCode.RightShift then
 				UIContainer.Enabled = not UIContainer.Enabled
-
-				lastIcon = Mouse.Icon
-				lastEnabled = UserInputService.MouseIconEnabled
-
-				Mouse.Icon = "rbxassetid://4727564979"
-				UserInputService.MouseIconEnabled = true
-			else
-				Mouse.Icon = lastIcon
-				UserInputService.MouseIconEnabled = lastEnabled
 			end
 		end)
 		
