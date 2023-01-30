@@ -5,6 +5,10 @@ local Lithium = {}
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
 local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+
+local LocalPlayer = Players.LocalPlayer
+local Mouse = LocalPlayer:GetMouse()
 
 local Themes = {
 	["Default Green"] = {
@@ -69,24 +73,6 @@ function Lithium:MakeWindow(info)
 		if typeof(info.Theme) == "string" then
 			info.Theme = Themes[info.Theme]
 		end
-
-		-- Mouse Cursor
-		local MouseCursor = Instance.new("Frame")
-		MouseCursor.Parent = UIContainer
-		MouseCursor.Size = UDim2.new(0, 4, 0, 4)
-		MouseCursor.BackgroundColor3 = Color3.new(1,1,1)
-		MouseCursor.AnchorPoint = Vector2.new(0, 0)
-		MouseCursor.ZIndex = 5
-		MouseCursor.Active = false
-
-		local CursorCorner = Instance.new("UICorner")
-		CursorCorner.Parent = MouseCursor
-		CursorCorner.CornerRadius = UDim.new(1, 0)
-
-		local CursorOutline = Instance.new("UIStroke")
-		CursorOutline.Parent = MouseCursor
-		CursorOutline.Thickness = 2
-		CursorOutline.Color = info.Theme.ZIndex3Col
 
         -- Mouse Unlock
         local MouseUnlock = Instance.new("ImageButton")
@@ -762,13 +748,6 @@ function Lithium:MakeWindow(info)
 			
 			return NewTab
 		end
-
-		-- Connect Mouse Cursor
-		RunService:BindToRenderStep("LithiumMouseCursor", 1, function()
-			local mousePos = UserInputService:GetMouseLocation()
-			MouseCursor.Position = UDim2.new(0, mousePos.X, 0, mousePos.Y)
-			mousePos = nil
-		end)
 		
 		-- Connect Window
 		Topbar.InputBegan:Connect(function(input)
@@ -786,9 +765,20 @@ function Lithium:MakeWindow(info)
 			end
 		end)
 		
+		local lastIcon = Mouse.Icon
+		local lastEnabled = UserInputService.MouseIconEnabled
 		UserInputService.InputBegan:Connect(function(input)
 			if input.KeyCode == Enum.KeyCode.RightShift then
 				UIContainer.Enabled = not UIContainer.Enabled
+
+				lastIcon = Mouse.Icon
+				lastEnabled = UserInputService.MouseIconEnabled
+
+				Mouse.Icon = "rbxassetid://4727564979"
+				UserInputService.MouseIconEnabled = true
+			else
+				Mouse.Icon = lastIcon
+				UserInputService.MouseIconEnabled = lastEnabled
 			end
 		end)
 		
