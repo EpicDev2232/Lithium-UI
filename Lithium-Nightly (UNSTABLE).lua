@@ -74,6 +74,24 @@ function Lithium:MakeWindow(info)
 			info.Theme = Themes[info.Theme]
 		end
 
+		-- Mouse Cursor
+		local MouseCursor = Instance.new("Frame")
+		MouseCursor.Parent = UIContainer
+		MouseCursor.Size = UDim2.new(0, 4, 0, 4)
+		MouseCursor.BackgroundColor3 = Color3.new(1,1,1)
+		MouseCursor.AnchorPoint = Vector2.new(0, 0)
+		MouseCursor.ZIndex = 5
+		MouseCursor.Active = false
+
+		local CursorCorner = Instance.new("UICorner")
+		CursorCorner.Parent = MouseCursor
+		CursorCorner.CornerRadius = UDim.new(1, 0)
+
+		local CursorOutline = Instance.new("UIStroke")
+		CursorOutline.Parent = MouseCursor
+		CursorOutline.Thickness = 2
+		CursorOutline.Color = info.Theme.ZIndex3Col
+
         -- Mouse Unlock
         local MouseUnlock = Instance.new("ImageButton")
         MouseUnlock.BackgroundTransparency = 1
@@ -749,6 +767,13 @@ function Lithium:MakeWindow(info)
 			return NewTab
 		end
 		
+		-- Connect Mouse Cursor
+		RunService:BindToRenderStep("LithiumMouseCursor", 9999, function()
+			local mousePos = UserInputService:GetMouseLocation()
+			MouseCursor.Position = UDim2.new(0, mousePos.X, 0, mousePos.Y)
+			mousePos = nil
+		end)
+
 		-- Connect Window
 		Topbar.InputBegan:Connect(function(input)
 			if input.UserInputType == Enum.UserInputType.MouseButton1 then
@@ -759,9 +784,6 @@ function Lithium:MakeWindow(info)
 					mousePos = UserInputService:GetMouseLocation()
 					Frame.Position = UDim2.new(0, mousePos.X, 0, mousePos.Y) + UDim2.new(0, offset.X, 0, offset.Y)
 				end)
-
-				mousePos = nil
-				offset = nil
 			end
 		end)
 		
