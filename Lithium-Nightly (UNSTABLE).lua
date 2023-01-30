@@ -182,7 +182,7 @@ function Lithium:MakeWindow(info)
 			if not tabInfo.Name then tabInfo.Name = "NewTab" end
 			
 			-- Container UI
-			local ExistingContainer = Containers:FindFirstChildOfClass("Frame")
+			local ExistingContainer = Containers:FindFirstChildOfClass("ScrollingFrame")
 			
 			local Container = Instance.new("ScrollingFrame")
 			Container.Name = tabInfo.Name
@@ -195,6 +195,12 @@ function Lithium:MakeWindow(info)
             Container.ScrollBarThickness = 0
             Container.CanvasSize = UDim2.new(1, 0, 4, 0)
 			
+			-- hide frame if one is already showing
+			if ExistingContainer then
+				Container.Visible = false
+			end
+			
+			-- columns
 			local LeftColumn
 			local RightColumn
 			
@@ -218,11 +224,6 @@ function Lithium:MakeWindow(info)
 				end
 				
 				NewColumn = nil
-			end
-			
-			-- hide frame if one is already showing
-			if ExistingContainer then
-				Container.Visible = false
 			end
 			
 			-- Tab Button
