@@ -73,19 +73,19 @@ function Lithium:MakeWindow(info)
 		-- Mouse Cursor
 		local MouseCursor = Instance.new("Frame")
 		MouseCursor.Parent = UIContainer
-		MouseCursor.Size = UDim2.new(0, 3, 0, 3)
+		MouseCursor.Size = UDim2.new(0, 4, 0, 4)
 		MouseCursor.BackgroundColor3 = Color3.new(1,1,1)
 		MouseCursor.AnchorPoint = Vector2.new(0, 0)
 		MouseCursor.ZIndex = 5
 
-		local HandleCorner = Instance.new("UICorner")
-		HandleCorner.Parent = Handle
-		HandleCorner.CornerRadius = UDim.new(1, 0)
+		local CursorCorner = Instance.new("UICorner")
+		CursorCorner.Parent = MouseCursor
+		CursorCorner.CornerRadius = UDim.new(1, 0)
 
-		local HandleOutline = Instance.new("UIStroke")
-		HandleOutline.Parent = Handle
-		HandleOutline.Thickness = 2
-		HandleOutline.Color = info.Theme.ZIndex3Col
+		local CursorOutline = Instance.new("UIStroke")
+		CursorOutline.Parent = MouseCursor
+		CursorOutline.Thickness = 2
+		CursorOutline.Color = info.Theme.ZIndex3Col
 
         -- Mouse Unlock
         local MouseUnlock = Instance.new("ImageButton")
