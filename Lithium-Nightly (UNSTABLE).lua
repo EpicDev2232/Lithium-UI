@@ -107,7 +107,7 @@ function Lithium:MakeWindow(info)
 		Frame.BorderSizePixel = 0
 		Frame.ClipsDescendants = true
 		Frame.Position = UDim2.new(0, 0, 0, 0)
-		Frame.Size = UDim2.new(0, 377, 0, 576)
+		Frame.Size = UDim2.new(0, 400, 0, 576)
 		
 		local Containers = Instance.new("Frame")
 		Containers.BackgroundTransparency = 1
