@@ -1,788 +1,1102 @@
 local Lithium = {}
 
--- Vars
-
+local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
-local CoreGui = game:GetService("CoreGui")
+local PlayerGui = game:WaitForChild("CoreGui")
 
-local Themes = {
-	["Default Green"] = {
-		UIAccents = Color3.fromRGB(94, 180, 85);
-		ZIndex1Col = Color3.fromRGB(56, 56, 56);
-		ZIndex2Col = Color3.fromRGB(47, 47, 47);
-		ZIndex3Col = Color3.fromRGB(39, 39, 39);
-		ZIndex4Col = Color3.fromRGB(31, 31, 31);
-		BackgroundCol = Color3.fromRGB(21, 21, 21)
-	};
+local LocalPlayer = Players.LocalPlayer
+
+Lithium.vars = {}
+
+function Lithium:MakeWindow(WindowProperties)
+	local Window = WindowProperties
 	
-	["Default Blue"] = {
-		UIAccents = Color3.fromRGB(94, 140, 180);
-		ZIndex1Col = Color3.fromRGB(56, 56, 56);
-		ZIndex2Col = Color3.fromRGB(47, 47, 47);
-		ZIndex3Col = Color3.fromRGB(39, 39, 39);
-		ZIndex4Col = Color3.fromRGB(31, 31, 31);
-		BackgroundCol = Color3.fromRGB(21, 21, 21)
-	};
+	-- default
 	
-	["Default Purple"] = {
-		UIAccents = Color3.fromRGB(141, 102, 180);
-		ZIndex1Col = Color3.fromRGB(56, 56, 56);
-		ZIndex2Col = Color3.fromRGB(47, 47, 47);
-		ZIndex3Col = Color3.fromRGB(39, 39, 39);
-		ZIndex4Col = Color3.fromRGB(31, 31, 31);
-		BackgroundCol = Color3.fromRGB(21, 21, 21)
-	};
+	if not Window.Theme then
+		Window.Theme = {
+			Outlines = Color3.fromRGB(67, 67, 67),
+			Color1 = Color3.fromRGB(33, 33, 33),
+			Color2 = Color3.fromRGB(24, 24, 24),
+			Accent = Color3.fromRGB(166, 120, 175),
+		}
+	end
 	
-	["Default"] = {
-		UIAccents = Color3.fromRGB(66, 66, 66);
-		ZIndex1Col = Color3.fromRGB(56, 56, 56);
-		ZIndex2Col = Color3.fromRGB(47, 47, 47);
-		ZIndex3Col = Color3.fromRGB(39, 39, 39);
-		ZIndex4Col = Color3.fromRGB(31, 31, 31);
-		BackgroundCol = Color3.fromRGB(21, 21, 21)
-	};
-}
-
--- Misc
-
-function lerp(a, b, c)
-	return a + (b - a) * c
-end
-
--- Lithium
-
-function Lithium:MakeWindow(info)
-	if info then
-		local LithiumUI = {}
-		LithiumUI.Flags = {}
-		
-		local UIContainer = Instance.new("ScreenGui")
-		UIContainer.ResetOnSpawn = false
-		UIContainer.IgnoreGuiInset = true
-		UIContainer.Parent = CoreGui
-		
-		-- Default Values
-		if not info.Title then info.Title = "Lithium" end
-		if not info.Theme then info.Theme = "Default" end
-		
-		if typeof(info.Theme) == "string" then
-			info.Theme = Themes[info.Theme]
+	if not Window.Title then
+		Window.Title = "lithium.ui"
+	end
+	
+	if not Window.Enabled then
+		Window.Enabled = true
+	end
+	
+	-- ui
+	
+	local LithiumContainer = Instance.new("ScreenGui")
+	LithiumContainer.Parent = PlayerGui
+	LithiumContainer.IgnoreGuiInset = true
+	LithiumContainer.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	
+	Window.MouseCursor = Instance.new("Frame")
+	Window.MouseCursor.Parent = LithiumContainer
+	Window.MouseCursor.Active = false
+	Window.MouseCursor.AnchorPoint = Vector2.new(0.5, 0.5)
+	Window.MouseCursor.Size = UDim2.new(0, 2, 0, 2)
+	Window.MouseCursor.BackgroundColor3 = Color3.new(1,1,1)
+	Window.MouseCursor.BorderColor3 = Color3.new()
+	Window.MouseCursor.ZIndex = 2
+	
+	Window.GUI = Instance.new("Frame")
+	Window.GUI.Name = "MainFrame"
+	Window.GUI.Parent = LithiumContainer
+	Window.GUI.Size = UDim2.new(0, 616,0, 700)
+	Window.GUI.Position = UDim2.new(0, 50, 0, 50)
+	
+	Window.GUI.BackgroundColor3 = Window.Theme.Accent
+	Window.GUI.BorderColor3 = Window.Theme.Color2
+	
+	Window.GUI:SetAttribute("BackgroundColor3", "Accent")
+	Window.GUI:SetAttribute("BorderColor3", "Color1")
+	
+	local Frame1 = Instance.new("Frame")
+	Frame1.Parent = Window.GUI
+	Frame1.Size = UDim2.new(1, -4, 1, -4)
+	Frame1.Position = UDim2.new(0, 2, 0, 2)
+	
+	Frame1.BackgroundColor3 = Window.Theme.Color2
+	Frame1.BorderSizePixel = 0
+	
+	Frame1:SetAttribute("BackgroundColor3", "Color2")
+	
+	local Title = Instance.new("TextLabel")
+	Title.Parent = Frame1
+	Title.Name = "Title"
+	Title.Size = UDim2.new(1, -10, 0, 20)
+	Title.Position = UDim2.new(0, 5, 0, 0)
+	
+	Title.BackgroundTransparency = 1
+	Title.TextStrokeTransparency = 0
+	Title.TextColor3 = Color3.new(1,1,1)
+	Title.FontFace = Font.fromName("Inconsolata")
+	Title.TextSize = 14
+	Title.Text = Window.Title
+	Title.TextXAlignment = Enum.TextXAlignment.Left
+	
+	local Frame2 = Instance.new("Frame")
+	Frame2.Parent = Frame1
+	Frame2.Position = UDim2.new(0, 6,0, 40)
+	Frame2.Size = UDim2.new(1, -12,1, -45)
+	
+	Frame2.BackgroundColor3 = Window.Theme.Color1
+	Frame2.BorderColor3 = Window.Theme.Outlines
+	
+	Frame2:SetAttribute("BackgroundColor3", "Color1")
+	Frame2:SetAttribute("BorderColor3", "Outlines")
+	
+	local TabContainer = Instance.new("Frame")
+	TabContainer.Parent = Frame2
+	TabContainer.Name = "Tabs"
+	TabContainer.Position = UDim2.new(0, 0, 0, -19)
+	TabContainer.Size = UDim2.new(1, 0,0, 18)
+	
+	TabContainer.BackgroundTransparency = 1
+	
+	local TabsListLayout = Instance.new("UIListLayout")
+	TabsListLayout.Parent = TabContainer
+	TabsListLayout.Padding = UDim.new(0, 5)
+	TabsListLayout.FillDirection = Enum.FillDirection.Horizontal
+	TabsListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+	
+	local TabPanelContainer = Instance.new("Frame")
+	TabPanelContainer.Parent = Frame2
+	TabPanelContainer.Name = "PanelContainer"
+	TabPanelContainer.Size = UDim2.new(1, -10,1, -10)
+	TabPanelContainer.Position = UDim2.new(0, 5, 0, 5)
+	
+	TabPanelContainer.BackgroundTransparency = 1
+	
+	local MouseUnlock = Instance.new("TextButton")
+	MouseUnlock.Parent = LithiumContainer
+	MouseUnlock.Size = UDim2.new(1,0,1,0)
+	MouseUnlock.Modal = true
+	MouseUnlock.ZIndex = 0
+	
+	MouseUnlock.BackgroundTransparency = 1
+	MouseUnlock.TextTransparency = 1
+	
+	-- code
+	
+	UserInputService.InputBegan:Connect(function(input, gameProcessed)
+		if input.KeyCode == Enum.KeyCode.RightShift then
+			Window.Enabled = not Window.Enabled
+			
+			LithiumContainer.Enabled = Window.Enabled
+		elseif input.UserInputType == Enum.UserInputType.MouseButton1 then
+			local mousePosition = UserInputService:GetMouseLocation() - Vector2.new(0, 30)
+			
+			if mousePosition.X > Window.GUI.AbsolutePosition.X and mousePosition.X < Window.GUI.AbsolutePosition.X + Window.GUI.AbsoluteSize.X then
+				if mousePosition.Y > Window.GUI.AbsolutePosition.Y and mousePosition.Y < Window.GUI.AbsolutePosition.Y + 30 then
+					local offset = Window.GUI.AbsolutePosition - UserInputService:GetMouseLocation()
+					
+					RunService:BindToRenderStep("MoveMenuWithMouse", 1, function()
+						mousePosition = UserInputService:GetMouseLocation() - Vector2.new(0, -30)
+						
+						Window.GUI.Position = UDim2.new(
+							0, mousePosition.X + offset.X,
+							0, mousePosition.Y + offset.Y
+						)
+					end)
+				end
+			end
 		end
-
-        -- Mouse Unlock
-        local MouseUnlock = Instance.new("ImageButton")
-        MouseUnlock.BackgroundTransparency = 1
-        MouseUnlock.Parent = UIContainer
-        MouseUnlock.Size = UDim2.new(1,0,1,0)
-        MouseUnlock.Position = UDim2.new()
-        MouseUnlock.Modal = true
+	end)
+	
+	UserInputService.InputEnded:Connect(function()
+		RunService:UnbindFromRenderStep("MoveMenuWithMouse")
+	end)
+	
+	RunService.RenderStepped:Connect(function()
+		local mousePos = UserInputService:GetMouseLocation()
 		
-		-- Window
-		local Frame = Instance.new("Frame")
-		Frame.Parent = UIContainer
-		Frame.BackgroundColor3 = info.Theme.BackgroundCol
-		Frame.BorderSizePixel = 0
-		Frame.ClipsDescendants = true
-		Frame.Position = UDim2.new(0, 0, 0, 0)
-		Frame.Size = UDim2.new(0, 377, 0, 576)
+		Window.MouseCursor.Position = UDim2.new(0, mousePos.X, 0, mousePos.Y)
 		
-		local Containers = Instance.new("Frame")
-		Containers.BackgroundTransparency = 1
-		Containers.Size = UDim2.new(1, 0, 1, -60)
-		Containers.Position = UDim2.new(0, 0, 0, 60)
-		Containers.Name = "Containers"
-		Containers.Parent = Frame
+		mousePos = nil
+	end)
+	
+	-- functions
+	
+	function Window:MakeTab(TabProperties)
+		local Tab = TabProperties
 		
-		-- Topbar
-		local Topbar = Instance.new("Frame")
-		Topbar.Name = "Topbar"
-		Topbar.Parent = Frame
-		Topbar.BackgroundColor3 = info.Theme.ZIndex4Col
-		Topbar.BorderSizePixel = 0
-		Topbar.Size = UDim2.new(1, 0, 0, 30)
-
-		-- Title
-		local Title = Instance.new("TextLabel")
-		Title.Name = "Title"
-		Title.Parent = Topbar
-		Title.BackgroundTransparency = 1
-		Title.Size = UDim2.new(1, 0, 1, 0)
-		Title.ZIndex = 3
-		Title.FontFace = Font.fromName("Sarpanch", Enum.FontWeight.Bold)
-		Title.Text = info.Title
-		Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-		Title.TextScaled = true
-		Title.TextXAlignment = Enum.TextXAlignment.Center
-
-		-- Background Image
-		local TopbarImage = Instance.new("Frame")
-		TopbarImage.Name = "TopbarImage"
-		TopbarImage.Parent = Topbar
-		TopbarImage.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		TopbarImage.BackgroundTransparency = 1
-		TopbarImage.ClipsDescendants = true
-		TopbarImage.Size = UDim2.new(1, 0, 1, 0)
-		TopbarImage.ZIndex = 2
-
-		-- Topbar Image
-		local Image = Instance.new("ImageLabel")
-		Image.Parent = TopbarImage
-		Image.BackgroundTransparency = 1
-		Image.BorderSizePixel = 0
-		Image.Position = UDim2.new(-0.4, 0, -12.5, 0)
-		Image.Size = UDim2.new(2.48, 0, 27.93, 0)
-		Image.Image = "rbxassetid://3052949762"
-		Image.ImageColor3 = info.Theme.UIAccents
-
-		-- Tabs
-		local Tabs = Instance.new("Frame")
-		Tabs.Name = "Tabs"
-		Tabs.Parent = Topbar
-		Tabs.BackgroundColor3 = info.Theme.ZIndex4Col
-		Tabs.BorderSizePixel = 0
-		Tabs.ClipsDescendants = true
-		Tabs.Position = UDim2.new(0, 0, 1, 0)
-		Tabs.Size = UDim2.new(1, 0, 0, 25)
+		-- default
 		
-		local TabLayout = Instance.new("UITableLayout")
-		TabLayout.Parent = Tabs
-		TabLayout.FillEmptySpaceRows = true
-		TabLayout.FillEmptySpaceColumns = true
-		TabLayout.FillDirection = Enum.FillDirection.Horizontal
-		TabLayout.SortOrder = Enum.SortOrder.LayoutOrder
+		if not Tab.Name then
+			Tab.Name = "new tab"
+		end
 		
-		-- UI Functions
-		function LithiumUI:MakeTab(tabInfo)
-			local NewTab = {}
-			
-			-- Default Values
-			if not tabInfo.Name then tabInfo.Name = "NewTab" end
-			
-			-- Container UI
-			local ExistingContainer = Containers:FindFirstChildOfClass("Frame")
-			
-			local Container = Instance.new("ScrollingFrame")
-			Container.Name = tabInfo.Name
-			Container.AnchorPoint = Vector2.new(0.5, 0)
-			Container.Size = UDim2.new(1, -5, 1, -70)
-			Container.Position = UDim2.new(0.5, 0, 0, 2.5)
-			Container.BackgroundTransparency = 1
-			Container.Parent = Containers
-            Container.BorderSizePixel = 0
-            Container.ScrollBarThickness = 0
-            Container.CanvasSize = UDim2.new(1, 0, 4, 0)
-			
-			local LeftColumn
-			local RightColumn
-			
-			for i = 1,2 do
-				local NewColumn = Instance.new("Frame")
-				NewColumn.BackgroundTransparency = 1
-				NewColumn.Size = UDim2.new(0.5, -2.5,1, 0)
-				NewColumn.Parent = Container
-				
-				local NewListLayout = Instance.new("UIListLayout")
-				NewListLayout.Parent = NewColumn
-				NewListLayout.Padding = UDim.new(0, 5)
-				
-				if i == 1 then
-					LeftColumn = NewColumn
-					LeftColumn.Name = "LeftColumn"
-				else
-					RightColumn = NewColumn
-					RightColumn.Name = "RightColumn"
-					RightColumn.Position = UDim2.new(0.5, 2.5, 0, 0)
-				end
-				
-				NewColumn = nil
+		-- ui
+		
+		Tab.TabButton = Instance.new("TextButton")
+		Tab.TabButton.Parent = TabContainer
+		Tab.TabButton.Name = Tab.Name
+		Tab.TabButton.Size = UDim2.new(0, 80, 1, 0)
+		
+		Tab.TabButton.BackgroundColor3 = Window.Theme.Color2
+		Tab.TabButton.BorderColor3 = Window.Theme.Outlines
+		Tab.TabButton.Text = ""
+		Tab.TabButton.AutoButtonColor = false
+		
+		Tab.TabButton:SetAttribute("BackgroundColor3", "Color2")
+		Tab.TabButton:SetAttribute("BorderColor3", "Outlines")
+		
+		local TabButtonCover = Instance.new("Frame")
+		TabButtonCover.Parent = Tab.TabButton
+		TabButtonCover.Name = "Cover"
+		TabButtonCover.Size = UDim2.new(1, 0,1, 1)
+		TabButtonCover.ZIndex = 3
+		TabButtonCover.Active = true
+		TabButtonCover.Visible = false
+		
+		TabButtonCover.BackgroundColor3 = Window.Theme.Color1
+		TabButtonCover.BorderSizePixel = 0
+		
+		TabButtonCover:SetAttribute("BackgroundColor3", "Color1")
+		
+		local TabButtonFade = Instance.new("Frame")
+		TabButtonFade.Parent = Tab.TabButton
+		TabButtonFade.Name = "Fade"
+		TabButtonFade.Size = UDim2.new(1,0,1,0)
+		TabButtonFade.ZIndex = 2
+		TabButtonFade.Active = true
+		
+		TabButtonFade.BackgroundColor3 = Window.Theme.Color1
+		TabButtonFade.BorderSizePixel = 0
+		Lithium:VerticalFade(TabButtonFade)
+		
+		TabButtonFade:SetAttribute("BackgroundColor3", "Color1")
+		
+		local TabButtonText = Instance.new("TextLabel")
+		TabButtonText.Parent = Tab.TabButton
+		TabButtonText.Name = "Title"
+		TabButtonText.Size = UDim2.new(1,0,1,0)
+		TabButtonText.ZIndex = 4
+		TabButtonText.Active = true
+		
+		TabButtonText.BackgroundTransparency = 1
+		TabButtonText.Text = Tab.Name
+		TabButtonText.TextColor3 = Color3.new(1,1,1)
+		TabButtonText.TextStrokeTransparency = 0
+		TabButtonText.TextSize = 14
+		TabButtonText.FontFace = Font.fromName("Inconsolata")
+		
+		Tab.TabContainer = Instance.new("Frame")
+		Tab.TabContainer.Parent = TabPanelContainer
+		Tab.TabContainer.Name = Tab.Name
+		Tab.TabContainer.Size = UDim2.new(1,0,1,0)
+		Tab.TabContainer.BackgroundTransparency = 1
+		Tab.TabContainer.Visible = false
+		
+		local Left = Instance.new("Frame")
+		Left.Parent = Tab.TabContainer
+		Left.Name = "Left"
+		Left.Size = UDim2.new(0.5, -3,1, 0)
+		Left.BackgroundTransparency = 1
+		Left.ZIndex = 2
+		
+		local LeftListLayout = Instance.new("UIListLayout")
+		LeftListLayout.Parent = Left
+		LeftListLayout.FillDirection = Enum.FillDirection.Vertical
+		LeftListLayout.Padding = UDim.new(0, 5)
+		
+		local Right = Instance.new("Frame")
+		Right.Parent = Tab.TabContainer
+		Right.Name = "Right"
+		Right.Size = UDim2.new(0.5, -3,1, 0)
+		Right.Position = UDim2.new(0.5, 3,0, 0)
+		Right.BackgroundTransparency = 1
+
+		local RightListLayout = Instance.new("UIListLayout")
+		RightListLayout.Parent = Right
+		RightListLayout.FillDirection = Enum.FillDirection.Vertical
+		RightListLayout.Padding = UDim.new(0, 5)
+		
+		-- code
+		
+		Tab.TabButton.Activated:Connect(function()
+			if Lithium.vars.LastTab then
+				Lithium.vars.LastTab.TabButton.Cover.Visible = false
+				Lithium.vars.LastTab.TabContainer.Visible = false
 			end
 			
-			-- hide frame if one is already showing
-			if ExistingContainer then
-				Container.Visible = false
+			Lithium.vars.LastTab = Tab
+			TabButtonCover.Visible = true
+			Tab.TabContainer.Visible = true
+		end)
+		
+		-- functions
+		
+		function Tab:MakePanel(PanelProperties)
+			local Panel = PanelProperties
+			
+			-- default
+			
+			if not Panel.Name then
+				Panel.Name = "NewPanel"
 			end
 			
-			-- Tab Button
-			local TabButton = Instance.new("TextButton")
-			TabButton.Name = tabInfo.Name
-			TabButton.BackgroundColor3 = info.Theme.ZIndex2Col
-			TabButton.BorderSizePixel = 0
-			TabButton.TextColor3 = Color3.new(1,1,1)
-			TabButton.Text = tabInfo.Name
-			TabButton.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
-			TabButton.Parent = Tabs
-			TabButton.TextSize = 15
+			if not Panel.Side then
+				Panel.Side = "Left"
+			end
 			
-			local TabOutline = Instance.new("UIStroke")
-			TabOutline.Parent = TabButton
-			TabOutline.Color = info.Theme.ZIndex4Col
-			TabOutline.Thickness = 1
-			TabOutline.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-			TabOutline.LineJoinMode = Enum.LineJoinMode.Bevel
+			-- ui
 			
-			TabButton.Activated:Connect(function()
-				for _, OtherContainer in pairs(Containers:GetChildren()) do
-					OtherContainer.Visible = false
-				end
-				
-				Container.Visible = true
+			Panel.PanelFrame = Instance.new("Frame")
+			Panel.PanelFrame.Parent = Tab.TabContainer[Panel.Side]
+			Panel.PanelFrame.Size = UDim2.new(1, 0, 0, 20)
+			Panel.PanelFrame.Name = Panel.Name
+			
+			Panel.PanelFrame.BackgroundColor3 = Window.Theme.Color2
+			Panel.PanelFrame.BorderColor3 = Window.Theme.Outlines
+			
+			Panel.PanelFrame:SetAttribute("BackgroundColor3", "Color2")
+			Panel.PanelFrame:SetAttribute("BorderColor3", "Outlines")
+			
+			local PanelLine = Instance.new("Frame")
+			PanelLine.Parent = Panel.PanelFrame
+			PanelLine.Size = UDim2.new(1, 0, 0, 1)
+			PanelLine.Position = UDim2.new(0, 0, 0, -1)
+			
+			PanelLine.BorderSizePixel = 0
+			PanelLine.BackgroundColor3 = Window.Theme.Accent
+			
+			PanelLine:SetAttribute("BackgroundColor3", "Accents")
+			
+			local PanelTitle = Instance.new("TextLabel")
+			PanelTitle.Parent = Panel.PanelFrame
+			PanelTitle.Size = UDim2.new(1, -4, 0, 13)
+			PanelTitle.Position = UDim2.new(0, 4, 0, 0)
+			
+			PanelTitle.BackgroundTransparency = 1
+			PanelTitle.Text = Panel.Name
+			PanelTitle.TextColor3 = Color3.new(1,1,1)
+			PanelTitle.TextStrokeTransparency = 0
+			PanelTitle.TextSize = 14
+			PanelTitle.FontFace = Font.fromName("Inconsolata")
+			PanelTitle.TextXAlignment = Enum.TextXAlignment.Left
+			
+			local PanelContainer = Instance.new("Frame")
+			PanelContainer.Parent = Panel.PanelFrame
+			PanelContainer.Name = "Container"
+			PanelContainer.Size = UDim2.new(1, -10, 1, -24)
+			PanelContainer.Position = UDim2.new(0, 5,0, 20)
+			PanelContainer.BackgroundTransparency = 1
+			
+			local PanelContainerListLayout = Instance.new("UIListLayout")
+			PanelContainerListLayout.Parent = PanelContainer
+			PanelContainerListLayout.Padding = UDim.new(0, 3)
+			PanelContainerListLayout.FillDirection = Enum.FillDirection.Vertical
+			PanelContainerListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+			
+			-- code
+			
+			PanelContainer.ChildAdded:Connect(function()
+				Panel:UpdateSize()
 			end)
 			
-			-- Tab Functions
-			function NewTab:MakePanel(panelInfo)
-				local NewPanel = {}
+			PanelContainer.ChildRemoved:Connect(function()
+				Panel:UpdateSize()
+			end)
+			
+			-- functions
+			
+			function Panel:UpdateSize()
+				local totalSize = 20 -- default size
 				
-				-- Default Values
-				if not panelInfo.Side then panelInfo.Side = "Left" end
-				if not panelInfo.Name then panelInfo.Name = "NewPanel" end
+				for _, uiElement in pairs(PanelContainer:GetChildren()) do
+					if uiElement:IsA("Frame") then
+						totalSize += uiElement.AbsoluteSize.Y + PanelContainerListLayout.Padding.Offset
+					end
+				end
 				
-				-- Panel UI
-				NewPanel.Gui = Instance.new("Frame")
-				NewPanel.Gui.BackgroundColor3 = info.Theme.ZIndex3Col
-				NewPanel.Gui.BorderSizePixel = 0
-				NewPanel.Gui.Parent = Container:FindFirstChild(panelInfo.Side.. "Column")
-				NewPanel.Gui.Size = UDim2.new(1, 0, 0, 0)
+				Panel.PanelFrame.Size = UDim2.new(1, 0, 0, totalSize)
+			end
+			
+			function Panel:MakeLabel(LabelProperties)
+				local Label = LabelProperties or {}
 				
-				local PanelContainer = Instance.new("Frame")
-				PanelContainer.BackgroundTransparency = 1
-				PanelContainer.Position = UDim2.new(0, 2.5, 0, 25)
-				PanelContainer.Size = UDim2.new(1, -5 ,1, -30)
-				PanelContainer.Parent = NewPanel.Gui
-				PanelContainer.Name = "Container"
+				-- defaults
 				
-				local PanelListLayout = Instance.new("UIListLayout")
-				PanelListLayout.Parent = PanelContainer
-				PanelListLayout.Padding = UDim.new(0, 4)
-                PanelListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+				if not Label.Name then
+					Label.Name = "new label"
+				end
 				
-				local PanelName = Instance.new("TextLabel")
-				PanelName.Name = "Title"
-				PanelName.Text = panelInfo.Name
-				PanelName.TextColor3 = Color3.new(1,1,1)
-				PanelName.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
-				PanelName.Size = UDim2.new(1, 0, 0, 18)
-				PanelName.BackgroundColor3 = info.Theme.ZIndex2Col
-				PanelName.Parent = NewPanel.Gui
-				PanelName.TextSize = 16
-				PanelName.TextXAlignment = Enum.TextXAlignment.Left
-				PanelName.TextYAlignment = Enum.TextYAlignment.Bottom
-				PanelName.BorderSizePixel = 0
+				-- ui
 				
-				local Underline = Instance.new("Frame")
-				Underline.Parent = PanelName
-				Underline.BackgroundColor3 = info.Theme.UIAccents
-				Underline.Size = UDim2.new(1, 0, 0, 1)
-				Underline.Position = UDim2.new(0, 0, 1, 0)
-				Underline.BorderSizePixel = 0
+				Label.LabelFrame = Instance.new("Frame")
+				Label.LabelFrame.Name = Label.Name
+				Label.LabelFrame.Size = UDim2.new(1, 0, 0, 15)
+				Label.LabelFrame.Parent = PanelContainer
 				
-				-- Panel Functions
-				function NewPanel:MakeToggle(toggleInfo)
-					local NewToggle = toggleInfo
+				Label.LabelFrame.BackgroundTransparency = 1
+				
+				local TextLabel = Instance.new("TextLabel")
+				TextLabel.Parent = Label.LabelFrame
+				TextLabel.AnchorPoint = Vector2.new(0, 0.5)
+				TextLabel.Size = UDim2.new(1, -4,0, 13)
+				TextLabel.Position = UDim2.new(0, 0, 0.5, 0)
+				
+				TextLabel.BackgroundTransparency = 1
+				TextLabel.TextColor3 = Color3.new(1,1,1)
+				TextLabel.TextStrokeTransparency = 0
+				TextLabel.TextSize = 14
+				TextLabel.FontFace = Font.fromName("Inconsolata")
+				TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+				TextLabel.Text = Label.Name
+				
+				-- functions
+				
+				function Label:MakeToggle(ToggleProperties)
+					local Toggle = ToggleProperties or {}
 					
-					if not NewToggle then
-						NewToggle = {}
+					-- defaults
+					
+					if not Toggle.Value then
+						Toggle.Value = false
 					end
 					
-					-- Default Values
-					if not NewToggle.Text then NewToggle.Text = "NewToggle" end
-					if not NewToggle.Value then NewToggle.Value = false end
-                    if not NewToggle.Flag then NewToggle.Flag = NewToggle.Text end
+					-- ui
 					
-					-- Slider UI
-					NewToggle.Gui = Instance.new("TextLabel")
-					NewToggle.Gui.Name = NewToggle.Text
-					NewToggle.Gui.BackgroundColor3 = info.Theme.ZIndex2Col
-					NewToggle.Gui.BorderSizePixel = 0
-					NewToggle.Gui.Size = UDim2.new(1, 0, 0, 20)
-					NewToggle.Gui.TextColor3 = Color3.new(1,1,1)
-					NewToggle.Gui.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
-					NewToggle.Gui.Text = NewToggle.Text
-					NewToggle.Gui.TextXAlignment = Enum.TextXAlignment.Left
-					NewToggle.Gui.TextSize = 14
-					NewToggle.Gui.Parent = PanelContainer
+					Toggle.ToggleContainer = Instance.new("Frame")
+					Toggle.ToggleContainer.Parent = Label.LabelFrame
+					Toggle.ToggleContainer.Size = UDim2.new(1, 0, 1, 0)
 					
-					local ToggleIndicator = Instance.new("ImageButton")
-					ToggleIndicator.Position = UDim2.new(0.92, 0,0.25, 0)
-					ToggleIndicator.Size = UDim2.new(0.059, 0,0.75, 0)
-					ToggleIndicator.BackgroundColor3 = info.Theme.UIAccents
-					ToggleIndicator.BorderSizePixel = 0
-					ToggleIndicator.Parent = NewToggle.Gui
-					ToggleIndicator.Name = "Indicator"
-					ToggleIndicator.AutoButtonColor = false
+					Toggle.ToggleContainer.BorderSizePixel = 0
+					Toggle.ToggleContainer.BackgroundColor3 = Window.Theme.Outlines
 					
-					local IndicatorOutline = Instance.new("UIStroke")
-					IndicatorOutline.Parent = ToggleIndicator
-					IndicatorOutline.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-					IndicatorOutline.LineJoinMode = Enum.LineJoinMode.Bevel
-					IndicatorOutline.Thickness = 2
-					IndicatorOutline.Color = info.Theme.UIAccents
+					Toggle.ToggleContainer:SetAttribute("BackgroundColor3", "Outlines")
+					Toggle.ToggleContainer:SetAttribute("Toggle", true)
 					
-					local IndicatorAspectRatio = Instance.new("UIAspectRatioConstraint")
-					IndicatorAspectRatio.Parent = ToggleIndicator
+					local ToggleContainerAspectRatio = Instance.new("UIAspectRatioConstraint")
+					ToggleContainerAspectRatio.Parent = Toggle.ToggleContainer
+					ToggleContainerAspectRatio.DominantAxis = Enum.DominantAxis.Width
 					
-					-- Toggle Functions
-					function NewToggle:SetValue(value)
-						NewToggle.Value = value
+					local ToggleButton = Instance.new("TextButton")
+					ToggleButton.Parent = Toggle.ToggleContainer
+					ToggleButton.Size = UDim2.new(1, -4,1, -4)
+					ToggleButton.Position = UDim2.new(0, 2, 0, 2)
+					ToggleButton.AutoButtonColor = false
+					
+					ToggleButton.Text = ""
+					ToggleButton.BorderColor3 = Color3.new()
+					
+					Lithium:VerticalFade(ToggleButton)
+					
+					-- code
+					
+					ToggleButton.Activated:Connect(function()
+						Toggle:Toggle()
+					end)
+					
+					-- functions
+					
+					function Toggle:Toggle(bool)
+						if bool == nil then
+							bool = not Toggle.Value
+						end
 						
-						if NewToggle.Value == true then
-							ToggleIndicator.BackgroundTransparency = 0
+						Toggle.Value = bool
+						
+						if Toggle.Callback then
+							task.spawn(function() Toggle.Callback(Toggle.Value) end)
+						end
+						
+						if Toggle.Value then
+							ToggleButton:SetAttribute("BackgroundColor3", "Accent")
 						else
-							ToggleIndicator.BackgroundTransparency = 1
+							ToggleButton:SetAttribute("BackgroundColor3", "Color2")
 						end
 						
-						if NewToggle.Flag then
-							LithiumUI.Flags[NewToggle.Flag] = value
-						end
-						
-						if NewToggle.Callback then
-							task.spawn(function() NewToggle.Callback(value) end)
-						end
+						ToggleButton.BackgroundColor3 = Window.Theme[ToggleButton:GetAttribute("BackgroundColor3")]
 					end
 					
-					-- Connect Toggle
-					ToggleIndicator.Activated:Connect(function()
-						NewToggle:SetValue(not NewToggle.Value)
-					end)
+					Toggle:Toggle(Toggle.Value)
+					Label:UpdateComponentPadding()
 					
-					-- set default value
-					NewToggle:SetValue(NewToggle.Value)
-					
-					return NewToggle
+					return Toggle
 				end
 				
-				function NewPanel:MakeSlider(sliderInfo)
-					local NewSlider = sliderInfo
+				function Label:MakeColorPicker(ColorPickerProperties)
+					local ColorPicker = ColorPickerProperties or {}
 					
-					if not NewSlider then
-						NewSlider = {}
+					-- defaults
+					
+					if not ColorPicker.Name then
+						ColorPicker.Name = "new color picker"
 					end
 					
-					-- Default Values
-					if not NewSlider.Text then NewSlider.Text = "NewSlider" end
-					if not NewSlider.Min then NewSlider.Min = 0 end
-					if not NewSlider.Max then NewSlider.Max = 100 end
-					if not NewSlider.Inc then NewSlider.Inc = 1 end
-					if not NewSlider.Value then NewSlider.Value = NewSlider.Min end
-                    if not NewSlider.Flag then NewSlider.Flag = NewSlider.Text end
+					if not ColorPicker.Color then
+						ColorPicker.Color = Color3.new(1,0,0)
+					end
 					
-					NewSlider.Inc = math.clamp(NewSlider.Inc, 0.001, 1)
+					local defH, defS, defV = ColorPicker.Color:ToHSV()
 					
-					-- Slider UI
-					NewSlider.Gui = Instance.new("Frame")
-					NewSlider.Gui.Name = NewSlider.Text
-					NewSlider.Gui.BackgroundColor3 = info.Theme.ZIndex2Col
-					NewSlider.Gui.BorderSizePixel = 0
-					NewSlider.Gui.Size = UDim2.new(1, 0, 0, 40)
-					NewSlider.Gui.Parent = PanelContainer
+					ColorPicker.Hue = defH
+					ColorPicker.Saturation = defS
+					ColorPicker.Val = defV
 					
-					local SliderText = Instance.new("TextLabel")
-					SliderText.Name = "Text"
-					SliderText.BackgroundTransparency = 1
-					SliderText.Size = UDim2.new(0.688, 0,0.5, 0)
-					SliderText.Parent = NewSlider.Gui
-					SliderText.TextColor3 = Color3.new(1,1,1)
-					SliderText.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
-					SliderText.Text = NewSlider.Text
-					SliderText.TextXAlignment = Enum.TextXAlignment.Left
-					SliderText.TextSize = 14
+					-- ui
 					
-					local SliderValue = Instance.new("TextLabel")
-					SliderValue.Name = "Indicator"
-					SliderValue.BackgroundTransparency = 1
-					SliderValue.Size = UDim2.new(0.287, 0,0.5, 0)
-					SliderValue.Position = UDim2.new(0.7, 0, 0, 0)
-					SliderValue.Parent = NewSlider.Gui
-					SliderValue.TextColor3 = Color3.new(1,1,1)
-					SliderValue.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
-					SliderValue.Text = tostring(NewSlider.Def)
-					SliderValue.TextXAlignment = Enum.TextXAlignment.Right
-					SliderValue.TextSize = 14
-					
-					local SliderContainer = Instance.new("Frame")
-					SliderContainer.BackgroundColor3 = info.Theme.ZIndex3Col
-					SliderContainer.Position = UDim2.new(0.053, 0,0.675, 0)
-					SliderContainer.Size = UDim2.new(0.888, 0,0.15, 0)
-					SliderContainer.Parent = NewSlider.Gui
-					
-					local SliderContainerCorner = Instance.new("UICorner")
-					SliderContainerCorner.CornerRadius = UDim.new(1, 0)
-					SliderContainerCorner.Parent = SliderContainer
-					
-					local SliderHandle = Instance.new("ImageButton")
-					SliderHandle.BackgroundColor3 = info.Theme.UIAccents
-					SliderHandle.AnchorPoint = Vector2.new(0.5, 0.5)
-					SliderHandle.Size = UDim2.new(0, 13, 0, 13)
-					SliderHandle.Parent = SliderContainer
-					SliderHandle.AutoButtonColor = false
-					
-					local SliderHandleCorner = Instance.new("UICorner")
-					SliderHandleCorner.CornerRadius = UDim.new(1, 0)
-					SliderHandleCorner.Parent = SliderHandle
-					
-					local SliderHandleAspect = Instance.new("UIAspectRatioConstraint")
-					SliderHandleAspect.Parent = SliderHandle
-					
-					-- Slider Functions
-					function NewSlider:SetValue(value)
-						SliderHandle.Position = UDim2.new((value - NewSlider.Min) / (NewSlider.Max - NewSlider.Min), 0, 0.5, 0)
-						SliderValue.Text = tostring(value)
-						
-						NewSlider.Value = value
-						
-						if NewSlider.Flag then
-							LithiumUI.Flags[NewSlider.Flag] = value
-						end
+					ColorPicker.ColorPickerContainer = Instance.new("Frame")
+					ColorPicker.ColorPickerContainer.Parent = Label.LabelFrame
+					ColorPicker.ColorPickerContainer.Size = UDim2.new(0, 25,1, 0)
 
-						if NewSlider.Callback then
-							task.spawn(function() NewSlider.Callback(value) end)
-						end
-					end
-					
-					-- Connect Slider
-					SliderHandle.MouseButton1Down:Connect(function()
-						RunService:BindToRenderStep("ConnectSlider", 1, function()
-							local mousePos = UserInputService:GetMouseLocation()
-							local lerpValue = math.clamp((mousePos.X - SliderContainer.AbsolutePosition.X) / SliderContainer.AbsoluteSize.X, 0, 1)
-							local newValue = math.round(lerp(NewSlider.Min, NewSlider.Max, lerpValue) / NewSlider.Inc) * NewSlider.Inc
-							
-							NewSlider:SetValue(newValue)
-						end)
-					end)
-					
-					UserInputService.InputEnded:Connect(function(Input)
-						if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-							RunService:UnbindFromRenderStep("ConnectSlider")
-						end
-					end)
-					
-					-- set default value
-					NewSlider:SetValue(NewSlider.Value)
-					
-					return NewSlider
-				end
-				
-				function NewPanel:MakeColorPicker(colorPickerInfo)
-					local NewColorPicker = colorPickerInfo
-					
-					-- Default Values
-					if not NewColorPicker.Text then NewColorPicker.Text = "NewColorPicker" end
-					if not NewColorPicker.Value then NewColorPicker.Value = Color3.new(1,1,1) end
-					if not (NewColorPicker.H or NewColorPicker.S or NewColorPicker.V) then
-						NewColorPicker.H, NewColorPicker.S, NewColorPicker.V = NewColorPicker.Value:ToHSV()
-					end
-                    if not NewColorPicker.Flag then NewColorPicker.Flag = NewColorPicker.Text end
-					
-					-- Misc Functions
-					local function CreateHandle(frame)
-						local Handle = Instance.new("Frame")
-						Handle.Parent = frame
-						Handle.Size = UDim2.new(0, 3, 0, 3)
-						Handle.BackgroundColor3 = Color3.new(1,1,1)
-						Handle.AnchorPoint = Vector2.new(0, 0)
-                        Handle.ZIndex = 5
+					ColorPicker.ColorPickerContainer.BorderSizePixel = 0
+					ColorPicker.ColorPickerContainer.BackgroundColor3 = Window.Theme.Outlines
 
-						local HandleCorner = Instance.new("UICorner")
-						HandleCorner.Parent = Handle
-						HandleCorner.CornerRadius = UDim.new(1, 0)
+					ColorPicker.ColorPickerContainer:SetAttribute("BackgroundColor3", "Outlines")
+					ColorPicker.ColorPickerContainer:SetAttribute("ColorPicker", true)
 
-						local HandleOutline = Instance.new("UIStroke")
-						HandleOutline.Parent = Handle
-						HandleOutline.Thickness = 2
-						HandleOutline.Color = info.Theme.ZIndex3Col
-						
-						return Handle
-					end
+					local ColorPickerButton = Instance.new("TextButton")
+					ColorPickerButton.Parent = ColorPicker.ColorPickerContainer
+					ColorPickerButton.Size = UDim2.new(1, -4,1, -4)
+					ColorPickerButton.Position = UDim2.new(0, 2, 0, 2)
+					ColorPickerButton.AutoButtonColor = false
+					ColorPickerButton.Text = ""
+					ColorPickerButton.BorderColor3 = Color3.new()
 					
-					local function FixHSVValues()
-						NewColorPicker.H = math.clamp(NewColorPicker.H * 100, 1, 100) * 0.01
-						NewColorPicker.S = math.clamp(NewColorPicker.S * 100, 1, 100) * 0.01
-						NewColorPicker.V = math.clamp(NewColorPicker.V * 100, 1, 100) * 0.01
-					end
+					Lithium:VerticalFade(ColorPickerButton)
 					
-					-- Color Picker UI
-					NewColorPicker.Gui = Instance.new("TextLabel")
-					NewColorPicker.Gui.Name = NewColorPicker.Text
-					NewColorPicker.Gui.BackgroundColor3 = info.Theme.ZIndex2Col
-					NewColorPicker.Gui.BorderSizePixel = 0
-					NewColorPicker.Gui.Size = UDim2.new(1, 0, 0, 20)
-					NewColorPicker.Gui.TextColor3 = Color3.new(1,1,1)
-					NewColorPicker.Gui.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
-					NewColorPicker.Gui.Text = NewColorPicker.Text
-					NewColorPicker.Gui.TextXAlignment = Enum.TextXAlignment.Left
-					NewColorPicker.Gui.TextSize = 14
-					NewColorPicker.Gui.Parent = PanelContainer
+					ColorPicker.ColorPickerFrame = Instance.new("Frame")
+					ColorPicker.ColorPickerFrame.Visible = false
+					ColorPicker.ColorPickerFrame.Parent = Panel.PanelFrame
+					ColorPicker.ColorPickerFrame.Position = UDim2.new(
+						0, ColorPicker.ColorPickerContainer.AbsolutePosition.X - Panel.PanelFrame.AbsolutePosition.X,
+						0, ColorPicker.ColorPickerContainer.AbsolutePosition.Y - Panel.PanelFrame.AbsolutePosition.Y
+					)
+					ColorPicker.ColorPickerFrame.Size = UDim2.new(0, 199,0, 207)
 					
-					local ColorIndicator = Instance.new("ImageButton")
-					ColorIndicator.Position = UDim2.new(0.92, 0,0.25, 0)
-					ColorIndicator.Size = UDim2.new(0.059, 0,0.75, 0)
-					ColorIndicator.BackgroundColor3 = NewColorPicker.Value
-					ColorIndicator.BorderSizePixel = 0
-					ColorIndicator.Parent = NewColorPicker.Gui
-					ColorIndicator.Name = "Indicator"
-					ColorIndicator.AutoButtonColor = false
+					ColorPicker.ColorPickerFrame.BackgroundColor3 = Window.Theme.Color2
+					ColorPicker.ColorPickerFrame.BorderColor3 = Window.Theme.Outlines
+					
+					ColorPicker.ColorPickerFrame:SetAttribute("BackgroundColor3", "Color2")
+					ColorPicker.ColorPickerFrame:SetAttribute("BorderColor3", "Outlines")
+					
+					local ColorPickerLine = Instance.new("Frame")
+					ColorPickerLine.Parent = ColorPicker.ColorPickerFrame
+					ColorPickerLine.Size = UDim2.new(1, 0, 0, 1)
+					ColorPickerLine.Position = UDim2.new(0, 0, 0, -1)
+					
+					ColorPickerLine.BorderSizePixel = 0
+					ColorPickerLine.BackgroundColor3 = Window.Theme.Accent
+					
+					ColorPickerLine:SetAttribute("BackgroundColor3", "Accent")
+					
+					local ColorPickerTitle = Instance.new("TextLabel")
+					ColorPicker.Parent = ColorPicker.ColorPickerFrame
+					ColorPicker.Size = UDim2.new(1, -4, 0, 13)
+					ColorPicker.Position = UDim2.new(0, 4, 0, 0)
 
-					local IndicatorOutline = Instance.new("UIStroke")
-					IndicatorOutline.Parent = ColorIndicator
-					IndicatorOutline.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
-					IndicatorOutline.LineJoinMode = Enum.LineJoinMode.Bevel
-					IndicatorOutline.Thickness = 2
-					IndicatorOutline.Color = info.Theme.ZIndex3Col
+					ColorPicker.BackgroundTransparency = 1
+					ColorPicker.Text = Label.Name
+					ColorPicker.TextColor3 = Color3.new(1,1,1)
+					ColorPicker.TextStrokeTransparency = 0
+					ColorPicker.TextSize = 14
+					ColorPicker.FontFace = Font.fromName("Inconsolata")
+					ColorPicker.TextXAlignment = Enum.TextXAlignment.Left
 					
-					local IndicatorAspectRatio = Instance.new("UIAspectRatioConstraint")
-					IndicatorAspectRatio.Parent = ColorIndicator
+					local SatVal = Instance.new("Frame")
+					SatVal.Parent = ColorPicker.ColorPickerFrame
+					SatVal.Size = UDim2.new(0, 147,0, 147)
+					SatVal.Position = UDim2.new(0, 6,0, 18)
 					
-					local ColorPickerFrame = Instance.new("Frame")
-					ColorPickerFrame.Parent = ColorIndicator
-					ColorPickerFrame.BackgroundColor3 = info.Theme.ZIndex4Col
-					ColorPickerFrame.BorderSizePixel = 0
-					ColorPickerFrame.AnchorPoint = Vector2.new(1, 0)
-					ColorPickerFrame.Position = UDim2.new(1, 0, 1, 0)
-					ColorPickerFrame.Size = UDim2.new(0, NewColorPicker.Gui.AbsoluteSize.X, 12, 0)
-					ColorPickerFrame.Visible = false
-                    ColorPickerFrame.ZIndex = 2
-					ColorPickerFrame.Name = "ColorPickerFrame"
+					SatVal.BorderColor3 = Window.Theme.Outlines
 					
-					-- Hue
+					SatVal:SetAttribute("BorderColor3", "Outlines")
+					
+					local SatValBlack = Instance.new("Frame")
+					SatValBlack.Parent = SatVal
+					SatValBlack.Size = UDim2.new(1, -2,1, -2)
+					SatValBlack.Position = UDim2.new(0, 1, 0, 1)
+					SatValBlack.ZIndex = 2
+					
+					SatValBlack.BackgroundColor3 = Color3.new()
+					SatValBlack.BorderColor3 = Color3.new()
+					
+					local SatValBlackFade = Instance.new("UIGradient")
+					SatValBlackFade.Parent = SatValBlack
+					SatValBlackFade.Rotation = -90
+					SatValBlackFade.Transparency = NumberSequence.new(0, 1)
+					
+					local SatValWhite = Instance.new("Frame")
+					SatValWhite.Parent = SatVal
+					SatValWhite.Size = UDim2.new(1, -2,1, -2)
+					SatValWhite.Position = UDim2.new(0, 1, 0, 1)
+
+					SatValWhite.BackgroundColor3 = Color3.new(1,1,1)
+					SatValWhite.BorderColor3 = Color3.new()
+					
+					local SatValWhiteFade = Instance.new("UIGradient")
+					SatValWhiteFade.Parent = SatValWhite
+					SatValWhiteFade.Transparency = NumberSequence.new(0, 1)
+					
+					local SatValHandle = Instance.new("Frame")
+					SatValHandle.Parent = SatVal
+					SatValHandle.Size = UDim2.new(0, 2, 0, 2)
+					SatValHandle.ZIndex = 3
+					
+					SatValHandle.BackgroundColor3 = Color3.new(1,1,1)
+					SatValHandle.BorderColor3 = Color3.new()
+					
 					local Hue = Instance.new("Frame")
-					Hue.Name = "Hue"
-					Hue.Parent = ColorPickerFrame
-					Hue.Position = UDim2.new(0.053, 0,0.069, 0)
-					Hue.Size = UDim2.new(0.66, 0,0.916, 0)
-					Hue.BorderSizePixel = 0
+					Hue.Parent = ColorPicker.ColorPickerFrame
+					Hue.Size = UDim2.new(0, 30,0, 147)
+					Hue.Position = UDim2.new(0, 160,0, 18)
+					
 					Hue.BackgroundColor3 = Color3.new(1,1,1)
-                    Hue.ZIndex = 3
+					Hue.BorderColor3 = Window.Theme.Outlines
 					
-					local HueGradient = Instance.new("UIGradient")
-					HueGradient.Parent = Hue
+					Hue:SetAttribute("BorderColor3", "Outlines")
 					
-					local Keypoints = {}
-					for i = 0,10 do
-						table.insert(Keypoints, ColorSequenceKeypoint.new(i * 0.1, Color3.fromHSV(i * 0.1, 1, 1)))
+					local HueRainbow = Instance.new("Frame")
+					HueRainbow.Parent = Hue
+					HueRainbow.Size = UDim2.new(1, -2, 1, -2)
+					HueRainbow.Position = UDim2.new(0, 1, 0 ,1)
+					
+					HueRainbow.BackgroundColor3 = Color3.new(1,1,1)
+					HueRainbow.BorderColor3 = Window.Theme.Outlines
+					
+					HueRainbow:SetAttribute("BorderColor3", "Outlines")
+					
+					local HueRainbowFade = Instance.new("UIGradient")
+					HueRainbowFade.Parent = HueRainbow
+					HueRainbowFade.Rotation = -90
+					
+					local colorSequence = {}
+					
+					for i = 1,20 do
+						table.insert(
+							colorSequence,
+							ColorSequenceKeypoint.new(
+								((i - 1) / 19), Color3.fromHSV(i / 20, 1, 1)
+							)
+						)
 					end
 					
-					HueGradient.Color = ColorSequence.new(Keypoints)
+					HueRainbowFade.Color = ColorSequence.new(colorSequence)
 					
-					local HueAspect = Instance.new("UIAspectRatioConstraint")
-					HueAspect.Parent = Hue
-					
-					-- Saturation
-					local Saturation = Instance.new("ImageButton")
-					Saturation.Name = "Saturation"
-					Saturation.Parent = ColorPickerFrame
-					Saturation.Position = UDim2.new(0.053, 0,0.069, 0)
-					Saturation.Size = UDim2.new(0.66, 0,0.916, 0)
-					Saturation.BorderSizePixel = 0
-					Saturation.ZIndex = 4
-					Saturation.BackgroundColor3 = Color3.new(1,1,1)
-					Saturation.AutoButtonColor = false
-					
-					local SaturationGradient = Instance.new("UIGradient")
-					SaturationGradient.Parent = Saturation
-					SaturationGradient.Transparency = NumberSequence.new(0, 1)
-					SaturationGradient.Rotation = -90
-					
-					local SaturationAspect = Instance.new("UIAspectRatioConstraint")
-					SaturationAspect.Parent = Saturation
-					
-					local SaturationHandle = CreateHandle(Saturation)
-					
-					-- Value
-					local Value = Instance.new("ImageButton")
-					Value.Parent = ColorPickerFrame
-					Value.Position = UDim2.new(0.81, 0,0.076, 0)
-					Value.Size = UDim2.new(0.12, 0,0.84, 0)
-					Value.BorderSizePixel = 0
-					Value.BackgroundColor3 = Color3.new(1,1,1)
-					Value.AutoButtonColor = false
-                    Value.ZIndex = 3
-					
-					local ValueGradient = Instance.new("UIGradient")
-					ValueGradient.Parent = Value
-					ValueGradient.Color = ColorSequence.new(Color3.new(1,1,1), Color3.new(0,0,0))
-					ValueGradient.Rotation = 90
-					
-					local ValueHandle = CreateHandle(Value)
-					
-					-- Color Picker Functions
-					function NewColorPicker:SetValue(value)
-						ColorIndicator.BackgroundColor3 = value
-						NewColorPicker.Value = value
-						
-						NewColorPicker.H, NewColorPicker.S, NewColorPicker.V = value:ToHSV()
-						
-						Value.BackgroundColor3 = Color3.fromHSV(NewColorPicker.H, NewColorPicker.S, 1)
-						
-						ValueHandle.Position = UDim2.new(0.5, 0, 1 - NewColorPicker.V, 0)
-						SaturationHandle.Position = UDim2.new(NewColorPicker.H, 0, 1 - NewColorPicker.S, 0)
-						
-						if NewColorPicker.Flag then
-							LithiumUI.Flags[NewColorPicker.Flag] = value
-						end
-						
-						if NewColorPicker.Callback then
-							task.spawn(function() NewColorPicker.Callback(value) end)
-						end
-					end
-					
-					-- Connect Color Picker
-					ColorIndicator.Activated:Connect(function()
-						ColorPickerFrame.Visible = not ColorPickerFrame.Visible
+					local HueHandle = Instance.new("Frame")
+					HueHandle.Parent = Hue
+					HueHandle.Size = UDim2.new(0, 2, 0, 2)
+					HueHandle.ZIndex = 3
 
-                        -- if another color picker is open we should first close it
-                        if LithiumUI.CurrentColorPicker and LithiumUI.CurrentColorPicker ~= ColorPickerFrame then
-                            LithiumUI.CurrentColorPicker.Visible = false
-                        end
+					HueHandle.BackgroundColor3 = Color3.new(1,1,1)
+					HueHandle.BorderColor3 = Color3.new()
+					
+					local RGBTextBoxContainer = Instance.new("Frame")
+					RGBTextBoxContainer.Parent = ColorPicker.ColorPickerFrame
+					RGBTextBoxContainer.Size = UDim2.new(0, 100, 0, 28)
+					RGBTextBoxContainer.Position = UDim2.new(0, 6, 1, -35)
 
-						LithiumUI.CurrentColorPicker = ColorPickerFrame
+					RGBTextBoxContainer.BorderSizePixel = 0
+					RGBTextBoxContainer.BackgroundColor3 = Window.Theme.Outlines
+
+					RGBTextBoxContainer:SetAttribute("BackgroundColor3", "Outlines")
+					RGBTextBoxContainer:SetAttribute("ColorPicker", true)
+
+					local RGBTextBox = Instance.new("TextBox")
+					RGBTextBox.Parent = RGBTextBoxContainer
+					RGBTextBox.Size = UDim2.new(1, -4,1, -4)
+					RGBTextBox.Position = UDim2.new(0, 2, 0, 2)
+					RGBTextBox.ClearTextOnFocus = false
+					
+					RGBTextBox.BackgroundColor3 = Window.Theme.Color2
+					RGBTextBox.BorderColor3 = Color3.new()
+					RGBTextBox.TextColor3 = Color3.new(1,1,1)
+					RGBTextBox.TextStrokeTransparency = 0
+					RGBTextBox.TextSize = 14
+					RGBTextBox.PlaceholderText = "hex code"
+					RGBTextBox.FontFace = Font.fromName("Inconsolata")
+					RGBTextBox.TextXAlignment = Enum.TextXAlignment.Left
+					
+					RGBTextBox:SetAttribute("BackgroundColor3", "Color2")
+					
+					Lithium:VerticalFade(RGBTextBox)
+					
+					-- code
+					
+					RGBTextBox.Changed:Connect(function()
+						local color = Color3.fromHex(RGBTextBox.Text)
+						
+						if color and color ~= ColorPicker.Color then
+							ColorPicker:SetColor(color)
+						end
 					end)
 					
-					Saturation.MouseButton1Down:Connect(function()
-						RunService:BindToRenderStep("ConnectColorPickerHS", 1, function()
-							local mousePos = UserInputService:GetMouseLocation() - Vector2.new(0, 30)
+					ColorPickerButton.Activated:Connect(function()
+						if Lithium.vars.LastColorPicker then
+							Lithium.vars.LastColorPicker.ColorPickerFrame.Visible = false
+						end
+						
+						ColorPicker.ColorPickerFrame.Visible = true
+						Lithium.vars.LastColorPicker = ColorPicker
+					end)
+					
+					UserInputService.InputBegan:Connect(function(input, gameProcessed)
+						if input.UserInputType == Enum.UserInputType.MouseButton1 and ColorPicker.ColorPickerFrame.Visible == true then
+							local mousePosition = UserInputService:GetMouseLocation() - Vector2.new(0, 30)
 							
-							local x = math.clamp((mousePos.X - Saturation.AbsolutePosition.X) / Saturation.AbsoluteSize.X, 0, 1)
-							local y = 1 - math.clamp((mousePos.Y - Saturation.AbsolutePosition.Y) / Saturation.AbsoluteSize.Y, 0, 1)
+							if
+								mousePosition.X < ColorPicker.ColorPickerFrame.AbsolutePosition.X + ColorPicker.ColorPickerFrame.AbsoluteSize.X and
+								mousePosition.Y < ColorPicker.ColorPickerFrame.AbsolutePosition.Y + ColorPicker.ColorPickerFrame.AbsoluteSize.Y and 
+								mousePosition.X > ColorPicker.ColorPickerFrame.AbsolutePosition.X and
+								mousePosition.Y > ColorPicker.ColorPickerFrame.AbsolutePosition.Y
+							then
+								if 
+									mousePosition.X < SatVal.AbsolutePosition.X + SatVal.AbsoluteSize.X and
+									mousePosition.Y < SatVal.AbsolutePosition.Y + SatVal.AbsoluteSize.Y and 
+									mousePosition.X > SatVal.AbsolutePosition.X and
+									mousePosition.Y > SatVal.AbsolutePosition.Y
+								then
+									RunService:BindToRenderStep("UpdateSatVal", 1, function(delta)
+										mousePosition = UserInputService:GetMouseLocation() - Vector2.new(0, 30)
+
+										local clampedX = math.clamp((mousePosition.X - SatVal.AbsolutePosition.X) / SatVal.AbsoluteSize.X, 0.01, 0.99)
+										local clampedY = math.clamp((mousePosition.Y - SatVal.AbsolutePosition.Y) / SatVal.AbsoluteSize.Y, 0.01, 0.99)
+
+										ColorPicker.Saturation = clampedX
+										ColorPicker.Val = 1 - clampedY
+
+										ColorPicker:SetColor(Color3.fromHSV(ColorPicker.Hue, ColorPicker.Saturation, ColorPicker.Val))
+									end)
+								elseif 
+									mousePosition.X < Hue.AbsolutePosition.X + Hue.AbsoluteSize.X and
+									mousePosition.Y < Hue.AbsolutePosition.Y + Hue.AbsoluteSize.Y and 
+									mousePosition.X > Hue.AbsolutePosition.X and
+									mousePosition.Y > Hue.AbsolutePosition.Y
+								then
+									RunService:BindToRenderStep("UpdateHue", 1, function(delta)
+										mousePosition = UserInputService:GetMouseLocation() - Vector2.new(0, 30)
+
+										local clampedY = math.clamp((mousePosition.Y - Hue.AbsolutePosition.Y) / Hue.AbsoluteSize.Y, 0.01, 0.99)
+
+										ColorPicker.Hue = 1 - clampedY
+
+										ColorPicker:SetColor(Color3.fromHSV(ColorPicker.Hue, ColorPicker.Saturation, ColorPicker.Val))
+									end)
+								end
+							else
+								ColorPicker.ColorPickerFrame.Visible = false
+								Lithium.vars.LastColorPicker = nil
+							end
+						end
+					end)
+					
+					UserInputService.InputEnded:Connect(function(input)
+						if input.UserInputType == Enum.UserInputType.MouseButton1 then
+							RunService:UnbindFromRenderStep("UpdateSatVal")
+							RunService:UnbindFromRenderStep("UpdateHue")
+						end
+					end)
+					
+					-- functions
+					
+					function ColorPicker:SetColor(color)
+						if color then
+							ColorPicker.Color = color
 							
-							NewColorPicker.H = x
-							NewColorPicker.S = y
+							local h, s, v = color:ToHSV()
 							
-							FixHSVValues()
+							SatVal.BackgroundColor3 = Color3.fromHSV(h, 1, 1)
+							SatValHandle.Position = UDim2.new(s, 0, 1-v, 0)
+							HueHandle.Position = UDim2.new(0.5, 0, 1-h, 0)
 							
-							NewColorPicker:SetValue(Color3.fromHSV(NewColorPicker.H, NewColorPicker.S, NewColorPicker.V))
+							ColorPickerButton.BackgroundColor3 = color
+							
+							RGBTextBox.Text = color:ToHex()
+							
+							if ColorPicker.Callback then
+								task.spawn(function() ColorPicker.Callback(color) end)
+							end
+						end
+					end
+					
+					ColorPicker:SetColor(ColorPicker.Color)
+					Label:UpdateComponentPadding()
+					
+					return ColorPicker
+				end
+				
+				function Label:MakeKeybind(KeybindProperties)
+					local Keybind = KeybindProperties or {}
+					
+					-- ui
+					
+					Keybind.KeybindFrame = Instance.new("Frame")
+					Keybind.KeybindFrame.Parent = Label.LabelFrame
+					Keybind.KeybindFrame.Size = UDim2.new(0, 25,1, 0)
+					
+					Keybind.KeybindFrame.BorderSizePixel = 0
+					Keybind.KeybindFrame.BackgroundColor3 = Window.Theme.Outlines
+					
+					Keybind.KeybindFrame:SetAttribute("BackgroundColor3", "Outlines")
+					Keybind.KeybindFrame:SetAttribute("Keybind", true)
+					
+					local KeybindButton = Instance.new("TextButton")
+					KeybindButton.Parent = Keybind.KeybindFrame
+					KeybindButton.Size = UDim2.new(1, -4,1, -4)
+					KeybindButton.Position = UDim2.new(0, 2, 0, 2)
+					KeybindButton.AutoButtonColor = false
+					
+					KeybindButton.BackgroundColor3 = Window.Theme.Color2
+					KeybindButton.BorderColor3 = Color3.new()
+					
+					KeybindButton.TextColor3 = Color3.new(1,1,1)
+					KeybindButton.TextStrokeTransparency = 0
+					KeybindButton.TextSize = 14
+					KeybindButton.FontFace = Font.fromName("Inconsolata")
+					KeybindButton.Text = ""
+					
+					Lithium:VerticalFade(KeybindButton)
+					
+					-- code
+					
+					KeybindButton.Activated:Connect(function()
+						KeybindButton.Text = "_"
+						Keybind.Key = nil
+						
+						local KeyChange
+						
+						KeyChange = UserInputService.InputBegan:Connect(function(input)
+							if input.KeyCode == Enum.KeyCode.Backspace then
+								Keybind:ChangeKeybind(nil)
+							else
+								Keybind:ChangeKeybind(input)
+							end
+							
+							KeyChange:Disconnect()
+							KeyChange = nil
 						end)
 					end)
 					
-					Value.MouseButton1Down:Connect(function()
-						RunService:BindToRenderStep("ConnectColorPickerV", 1, function()
-							local mousePos = UserInputService:GetMouseLocation() - Vector2.new(0, 30)
-
-							local y = 1 - math.clamp((mousePos.Y - Value.AbsolutePosition.Y) / Value.AbsoluteSize.Y, 0, 1)
-							
-							NewColorPicker.V = y
-							
-							FixHSVValues()
-							
-							NewColorPicker:SetValue(Color3.fromHSV(NewColorPicker.H, NewColorPicker.S, NewColorPicker.V))
-						end)
-					end)
-					
-					UserInputService.InputEnded:Connect(function(Input)
-						if Input.UserInputType == Enum.UserInputType.MouseButton1 then
-							RunService:UnbindFromRenderStep("ConnectColorPickerV")
-							RunService:UnbindFromRenderStep("ConnectColorPickerHS")
+					UserInputService.InputBegan:Connect(function(input)
+						if input == Keybind.Key and Keybind.KeyPressed then
+							task.spawn(function() Keybind.KeyPressed() end)
 						end
 					end)
 					
-					-- set default value
-					NewColorPicker:SetValue(NewColorPicker.Value)
+					UserInputService.InputEnded:Connect(function(input)
+						if input == Keybind.Key and Keybind.KeyReleased then
+							task.spawn(function() Keybind.KeyReleased() end)
+						end
+					end)
 					
-					return NewColorPicker
-				end
-
-                function NewPanel:MakeSeparator(separatorInfo)
-                    local NewSeparator = separatorInfo
-
-                    -- Default Values
-                    if not NewSeparator.Text then NewSeparator.Text = "NewSeparator" end
-
-                    -- Separator UI
-                    NewSeparator.Gui = Instance.new("TextLabel")
-                    NewSeparator.Gui.Parent = PanelContainer
-                    NewSeparator.Gui.BackgroundTransparency = 1
-                    NewSeparator.Gui.Size = UDim2.new(1, 0, 0, 30)
-                    NewSeparator.Gui.FontFace = Font.fromName("Jura", Enum.FontWeight.Bold)
-                    NewSeparator.Gui.TextColor3 = Color3.new(1,1,1)
-                    NewSeparator.Gui.TextStrokeColor3 = info.Theme.ZIndex4Col
-                    NewSeparator.Gui.TextStrokeTransparency = 0
-                    NewSeparator.Gui.TextSize = 14
-                    NewSeparator.Gui.Text = NewSeparator.Text
-
-                    local Line1 = Instance.new("Frame")
-                    Line1.BorderColor3 = info.Theme.ZIndex4Col
-                    Line1.BorderSizePixel = 1
-                    Line1.Size = UDim2.new(0.5, -(NewSeparator.Gui.TextBounds.X * 0.5 + 15), 0, 0)
-                    Line1.Position = UDim2.new(0, 0, 0.5, 0)
-                    Line1.Parent = NewSeparator.Gui
-
-                    local Line2 = Instance.new("Frame")
-                    Line2.BorderColor3 = info.Theme.ZIndex4Col
-                    Line2.BorderSizePixel = 1
-                    Line2.Size = UDim2.new(0.5, -(NewSeparator.Gui.TextBounds.X * 0.5 + 15), 0, 0)
-                    Line2.Position = UDim2.new(0.5, NewSeparator.Gui.TextBounds.X * 0.5 + 15, 0.5, 0)
-                    Line2.Parent = NewSeparator.Gui
-
-                    return NewSeparator
-                end
-				
-				-- extend panel
-				local function UpdateSize()
-					local totalSize = 25
-
-					for _, child in pairs(PanelContainer:GetChildren()) do
-						if child:IsA("Frame") or child:IsA("TextButton") or child:IsA("TextLabel") then
-							totalSize = totalSize + child.AbsoluteSize.Y + PanelListLayout.Padding.Offset
+					-- functions
+					
+					function Keybind:ChangeKeybind(key)
+						if key then
+							Keybind.Key = key
+							
+							KeybindButton.Text = key.KeyCode.Name or key.UserInputType.Name
+						else
+							KeybindButton.Text = ""
 						end
 					end
-
-					NewPanel.Gui.Size = UDim2.new(1, 0, 0, totalSize)
+					
+					Label:UpdateComponentPadding()
+					
+					return Keybind
 				end
 				
-				PanelContainer.ChildAdded:Connect(UpdateSize)
-				PanelContainer.ChildRemoved:Connect(UpdateSize)
-				
-				UpdateSize()
-				
-				return NewPanel
-			end
-			
-			function NewTab:Destroy()
-				Container:Destroy()
-				TabButton:Destroy()
-			end
-			
-			return NewTab
-		end
-		
-		-- Connect Window
-		Topbar.InputBegan:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 then
-				local mousePos = UserInputService:GetMouseLocation()
-				local offset = Frame.AbsolutePosition - mousePos
-				
-				RunService:BindToRenderStep("DragLithiumWindow", 1, function()
-					mousePos = UserInputService:GetMouseLocation()
+				function Label:UpdateComponentPadding()
+					local pad1 = 0
+					local pad2 = 0
+
+					for _, child in pairs(Label.LabelFrame:GetChildren()) do
+						if child:GetAttribute("Toggle") then
+							child.Position = UDim2.new(0, pad1, 0, 0)
+							
+							pad1 += child.AbsoluteSize.X + 3
+						elseif child:GetAttribute("ColorPicker") or child:GetAttribute("Keybind") then
+							child.Position = UDim2.new(1, -child.AbsoluteSize.X - pad2, 0, 0)
+							
+							pad2 += child.AbsoluteSize.X + 3
+						end
+					end
 					
-					Frame.Position = UDim2.new(0, mousePos.X, 0, mousePos.Y) + UDim2.new(0, offset.X, 0, offset.Y)
+					TextLabel.Position = UDim2.new(0, pad1 + 2, 0.5, 0)
+					
+					return pad1, pad2
+				end
+				
+				return Label
+			end
+
+			function Panel:MakeSlider(SliderProperties)
+				local Slider = SliderProperties or {}
+				
+				-- default
+				
+				if not Slider.Min then
+					Slider.Min = 0
+				end
+				
+				if not Slider.Max then
+					Slider.Max = 100
+				end
+				
+				if not Slider.Inc then
+					Slider.Inc = 1
+				end
+				
+				if not Slider.Def then
+					Slider.Def = Slider.Min
+				end
+				
+				-- ui
+				
+				Slider.SliderFrame = Instance.new("Frame")
+				Slider.SliderFrame.Parent = PanelContainer
+				Slider.SliderFrame.Size = UDim2.new(1, 0, 0, 15)
+				
+				Slider.SliderFrame.BackgroundTransparency = 0
+				Slider.SliderFrame.BorderColor3 = Window.Theme.Outlines
+				
+				Slider.SliderFrame:SetAttribute("BorderColor3", "Outlines")
+				
+				local SliderContainer = Instance.new("Frame")
+				SliderContainer.Parent = Slider.SliderFrame
+				SliderContainer.Size = UDim2.new(1, -2, 1, -2)
+				SliderContainer.Position = UDim2.new(0, 1, 0, 1)
+				
+				SliderContainer.BackgroundColor3 = Window.Theme.Color1
+				SliderContainer.BorderColor3 = Color3.new()
+				
+				SliderContainer:SetAttribute("BackgroundColor3", "Color1")
+				
+				local SliderBar = Instance.new("Frame")
+				SliderBar.Parent = SliderContainer
+				SliderBar.Size = UDim2.new(0.5, 0, 1, 0)
+				
+				SliderBar.BorderSizePixel = 0
+				SliderBar.BackgroundColor3 = Window.Theme.Accent
+				
+				SliderBar:SetAttribute("BackgroundColor3", "Accents")
+				
+				local SliderLabel = Instance.new("TextLabel")
+				SliderLabel.Parent = Slider.SliderFrame
+				SliderLabel.AnchorPoint = Vector2.new(0, 0.5)
+				SliderLabel.Size = UDim2.new(1, 0, 0, 13)
+				SliderLabel.Position = UDim2.new(0, 0, 0.5, 0)
+				
+				SliderLabel.BackgroundTransparency = 1
+				
+				SliderLabel.TextColor3 = Color3.new(1,1,1)
+				SliderLabel.TextStrokeTransparency = 0
+				SliderLabel.TextSize = 14
+				SliderLabel.FontFace = Font.fromName("Inconsolata")
+				
+				SliderLabel.ZIndex = 2
+				
+				local SliderOverlay = Instance.new("Frame")
+				SliderOverlay.Parent = Slider.SliderFrame
+				SliderOverlay.Size = UDim2.new(1, -2, 1, -2)
+				SliderOverlay.Position = UDim2.new(0, 1, 0, 1)
+				SliderOverlay.ZIndex = 2
+				
+				SliderOverlay.BorderSizePixel = 0
+				SliderOverlay.BackgroundColor3 = Color3.new()
+				
+				local SliderFade = Instance.new("UIGradient")
+				SliderFade.Parent = SliderOverlay
+				SliderFade.Rotation = -90
+				SliderFade.Transparency = NumberSequence.new(0.65, 1)
+				
+				-- code
+				
+				UserInputService.InputBegan:Connect(function(input)
+					if input.UserInputType == Enum.UserInputType.MouseButton1 then
+						local mousePosition = UserInputService:GetMouseLocation() - Vector2.new(0, 30)
+
+						if
+							mousePosition.X < SliderContainer.AbsolutePosition.X + SliderContainer.AbsoluteSize.X and
+							mousePosition.Y < SliderContainer.AbsolutePosition.Y + SliderContainer.AbsoluteSize.Y and 
+							mousePosition.X > SliderContainer.AbsolutePosition.X and
+							mousePosition.Y > SliderContainer.AbsolutePosition.Y
+						then
+							RunService:BindToRenderStep("SliderUpdate", 1, function(delta)
+								mousePosition = UserInputService:GetMouseLocation() - Vector2.new(0, 30)
+								
+								local lerp = math.clamp((mousePosition.X - SliderContainer.AbsolutePosition.X) / SliderContainer.AbsoluteSize.X, 0, 1)
+								
+								Slider:SetValue(math.round(Lithium:Lerp(Slider.Min, Slider.Max, lerp) / Slider.Inc) * Slider.Inc)
+							end)
+						end
+					end
 				end)
-			end
-		end)
-		
-		UserInputService.InputBegan:Connect(function(input)
-			if input.KeyCode == Enum.KeyCode.RightShift then
-				UIContainer.Enabled = not UIContainer.Enabled
+				
+				UserInputService.InputEnded:Connect(function(input)
+					if input.UserInputType == Enum.UserInputType.MouseButton1 then
+						RunService:UnbindFromRenderStep("SliderUpdate")
+					end
+				end)
+				
+				-- functions
+				
+				function Slider:SetValue(value)
+					SliderLabel.Text = tostring(value).. " / ".. tostring(Slider.Max)
+					
+					local lerp = math.clamp((value - Slider.Min) / (Slider.Max - Slider.Min), 0, 1)
+					
+					SliderBar.Size = UDim2.new(lerp, 0, 1, 0)
+					
+					Slider.Value = value
+					
+					if Slider.Callback then
+						task.spawn(function() Slider.Callback(value) end)
+					end
+				end
+				
+				Slider:SetValue(Slider.Def)
+				Panel:UpdateSize()
 
-                UserInputService.MouseCursorEnabled = UIContainer.Enabled
+				return Slider
 			end
-		end)
-		
-		UserInputService.InputEnded:Connect(function(input)
-			if input.UserInputType == Enum.UserInputType.MouseButton1 then
-				RunService:UnbindFromRenderStep("DragLithiumWindow")
+
+			function Panel:MakeDropdown()
+				local Dropdown = {}
+
+				return Dropdown
 			end
-		end)
-		
-		-- Flag Functions
-		function LithiumUI:GetFlag(name)
-			local flag = LithiumUI.Flags[name]
+
+			function Panel:MakeSeparator(SeperatorProperties)
+				local Separator = SeperatorProperties or {}
+				
+				-- default
+				
+				if not Separator.Name then
+					Separator.Name = "new separator"
+				end
+				
+				-- ui
+				
+				Separator.SeparatorFrame = Instance.new("Frame")
+				Separator.SeparatorFrame.Parent = PanelContainer
+				Separator.SeparatorFrame.Size = UDim2.new(1, 0, 0, 25)
+				
+				Separator.SeparatorFrame.BackgroundTransparency = 1
+				
+				local SeparatorTextLabel = Instance.new("TextLabel")
+				SeparatorTextLabel.Parent = Separator.SeparatorFrame
+				SeparatorTextLabel.AnchorPoint = Vector2.new(0, 0.5)
+				SeparatorTextLabel.Size = UDim2.new(1, -4, 0, 13)
+				SeparatorTextLabel.Position = UDim2.new(0, 2, 0.5, 0)
+				
+				SeparatorTextLabel.BackgroundTransparency = 1
+				SeparatorTextLabel.BackgroundColor3 = Window.Theme.Color1
+				SeparatorTextLabel.BorderColor3 = Window.Theme.Outlines
+				
+				SeparatorTextLabel.TextColor3 = Color3.new(1,1,1)
+				SeparatorTextLabel.TextStrokeTransparency = 0
+				SeparatorTextLabel.TextSize = 14
+				SeparatorTextLabel.FontFace = Font.fromName("Inconsolata")
+				SeparatorTextLabel.Text = Separator.Name
+				
+				SeparatorTextLabel:SetAttribute("BackgroundColor3", "Color1")
+				SeparatorTextLabel:SetAttribute("BorderColor3", "Outlines")
+				
+				local line1 = Instance.new("Frame")
+				line1.Parent = Separator.SeparatorFrame
+				line1.AnchorPoint = Vector2.new(0, 0.5)
+				line1.Size = UDim2.new(0.5, -(SeparatorTextLabel.TextBounds.X + 5), 0, 2)
+				line1.Position = UDim2.new(0, 0, 0.5, 1)
+				
+				line1.BackgroundColor3 = Window.Theme.Color1
+				line1.BorderColor3 = Window.Theme.Outlines
+				
+				line1:SetAttribute("BackgroundColor3", "Color1")
+				line1:SetAttribute("BorderColor3", "Outlines")
+				
+				local line2 = Instance.new("Frame")
+				line2.Parent = Separator.SeparatorFrame
+				line2.AnchorPoint = Vector2.new(0, 0.5)
+				line2.Size = UDim2.new(0.5, -(SeparatorTextLabel.TextBounds.X + 5), 0, 2)
+				line2.Position = UDim2.new(0.5, SeparatorTextLabel.TextBounds.X + 5, 0.5, 1)
+
+				line2.BackgroundColor3 = Window.Theme.Color1
+				line2.BorderColor3 = Window.Theme.Outlines
+
+				line2:SetAttribute("BackgroundColor3", "Color1")
+				line2:SetAttribute("BorderColor3", "Outlines")
+				
+				Panel:UpdateSize()
+				
+				return Separator
+			end
 			
-			if flag then
-				return flag
-			end
+			return Panel
 		end
 		
-		return LithiumUI
+		return Tab
 	end
+	
+	function Window:UpdateTheme(theme)
+		
+	end
+	
+	return Window
+end
+
+function Lithium:VerticalFade(frame)
+	local Fade = Instance.new("UIGradient")
+	Fade.Parent = frame
+	Fade.Rotation = -90
+	
+	Fade.Color = ColorSequence.new(Color3.fromRGB(172, 172, 172), Color3.fromRGB(255, 255, 255))
+end
+
+function Lithium:Lerp(a, b, c)
+	return a + (b - a) * c
 end
 
 return Lithium
