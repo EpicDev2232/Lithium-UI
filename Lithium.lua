@@ -955,7 +955,7 @@ function Lithium:MakeWindow(WindowProperties)
 				-- code
 				
 				UserInputService.InputBegan:Connect(function(input)
-					if input.UserInputType == Enum.UserInputType.MouseButton1 then
+					if input.UserInputType == Enum.UserInputType.MouseButton1 and not Lithium.vars.LastColorPicker and Tab.TabContainer.Visible == true then
 						local mousePosition = UserInputService:GetMouseLocation() - Vector2.new(0, 30)
 
 						if
