@@ -770,6 +770,10 @@ function Lithium:MakeWindow(WindowProperties)
 				function Label:MakeKeybind(KeybindProperties)
 					local Keybind = KeybindProperties or {}
 					
+					-- defaults
+
+					Keybind.KeyDown = false
+
 					-- ui
 					
 					Keybind.KeybindFrame = Instance.new("Frame")
@@ -822,12 +826,14 @@ function Lithium:MakeWindow(WindowProperties)
 					UserInputService.InputBegan:Connect(function(input)
 						if input == Keybind.Key and Keybind.KeyPressed then
 							task.spawn(function() Keybind.KeyPressed() end)
+							Keybind.KeyDown = true
 						end
 					end)
 					
 					UserInputService.InputEnded:Connect(function(input)
 						if input == Keybind.Key and Keybind.KeyReleased then
 							task.spawn(function() Keybind.KeyReleased() end)
+							Keybind.KeyDown = false
 						end
 					end)
 					
