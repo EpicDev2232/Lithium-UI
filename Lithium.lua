@@ -824,16 +824,22 @@ function Lithium:MakeWindow(WindowProperties)
 					end)
 					
 					UserInputService.InputBegan:Connect(function(input)
-						if input == Keybind.Key and Keybind.KeyPressed then
-							task.spawn(function() Keybind.KeyPressed() end)
+						if input == Keybind.Key then
 							Keybind.KeyDown = true
+
+							if Keybind.KeyPressed then
+								task.spawn(function() Keybind.KeyPressed() end)
+							end
 						end
 					end)
 					
 					UserInputService.InputEnded:Connect(function(input)
-						if input == Keybind.Key and Keybind.KeyReleased then
-							task.spawn(function() Keybind.KeyReleased() end)
+						if input == Keybind.Key then
 							Keybind.KeyDown = false
+
+							if Keybind.KeyReleased then
+								task.spawn(function() Keybind.KeyReleased() end)
+							end
 						end
 					end)
 					
@@ -842,8 +848,14 @@ function Lithium:MakeWindow(WindowProperties)
 					function Keybind:ChangeKeybind(key)
 						if key then
 							Keybind.Key = key
+
+							local name = key.KeyCode.Name
+
+							if name == "Unknown" then
+								name = key.UserInputType.Name
+							end
 							
-							KeybindButton.Text = key.KeyCode.Name or key.UserInputType.Name
+							KeybindButton.Text = name
 						else
 							KeybindButton.Text = ""
 						end
