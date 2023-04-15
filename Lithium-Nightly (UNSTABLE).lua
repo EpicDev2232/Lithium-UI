@@ -1588,7 +1588,11 @@ function Lithium:MakeWindow(WindowProperties)
 			},
 			Keybind = {
 				Save = function(Keybind)
-					return Keybind.Key.Name
+					if Keybind.Key then
+						return Keybind.Key.Name
+					else
+						return nil
+					end
 				end,
 				Load = function(Keybind, Data)
 					local key = Enum.KeyCode[Data]
@@ -1631,6 +1635,8 @@ function Lithium:MakeWindow(WindowProperties)
 			local fileData = HttpService:JSONEncode(jsonWrite)
 
 			writefile(savename.."/"..Settings.PresetName.Text, fileData)
+
+			Settings.PresetList:AddElement(Settings.PresetName.Text)
 		end
 		
 		Settings.LoadPreset.Callback = function()
@@ -1653,6 +1659,8 @@ function Lithium:MakeWindow(WindowProperties)
 		Settings.DeletePreset.Callback = function()
 			if isfile(savename.."/"..Settings.PresetName.Text) then
 				delfile(savename.."/"..Settings.PresetName.Text)
+
+				Settings.PresetList:RemoveElement(Settings.PresetName.Text)
 			end
 		end
 		
