@@ -1634,7 +1634,7 @@ function Lithium:MakeWindow(WindowProperties)
 
 			local fileData = HttpService:JSONEncode(jsonWrite)
 
-			writefile(savename.."/"..Settings.PresetName.Text, fileData)
+			writefile(savename.."/"..Settings.PresetName.Text..".txt", fileData)
 
 			Settings.PresetList:AddElement(Settings.PresetName.Text)
 		end
