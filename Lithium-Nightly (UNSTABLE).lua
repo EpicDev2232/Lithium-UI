@@ -1633,6 +1633,8 @@ function Lithium:MakeWindow(WindowProperties)
 						end)
 					end
 
+					print(key)
+
 					Keybind:ChangeKeybind(key)
 				end,
 			},
