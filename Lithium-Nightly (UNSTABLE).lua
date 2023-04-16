@@ -1678,6 +1678,10 @@ function Lithium:MakeWindow(WindowProperties)
 			end
 		end
 
+		if not isfolder(savename) then
+			makefolder(savename)
+		end
+
 		for _, file in pairs(listfiles(savename)) do
 			Settings.PresetList:AddElement(file)
 		end
