@@ -888,7 +888,7 @@ function Lithium:MakeWindow(WindowProperties)
 						if key then
 							Keybind.Key = key
 
-							local name = key.Name
+							local name = key.KeyCode.Name
 
 							if name == "Unknown" then
 								name = key.UserInputType.Name
