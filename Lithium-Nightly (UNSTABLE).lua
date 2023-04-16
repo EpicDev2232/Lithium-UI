@@ -1654,6 +1654,14 @@ function Lithium:MakeWindow(WindowProperties)
 		end
 		
 		Settings.LoadPreset.Callback = function()
+			print(savename.."/"..Settings.PresetName.Text..".txt", isfile(savename.."/"..Settings.PresetName.Text..".txt"))
+
+			for _, file in pairs(listfiles(savename)) do
+				print(file)
+			end
+
+			print("why it not working")
+
 			if isfile(savename.."/"..Settings.PresetName.Text..".txt") then
 				local fileData = readfile(savename.."/"..Settings.PresetName.Text..".txt")
 
