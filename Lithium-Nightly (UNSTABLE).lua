@@ -1683,7 +1683,7 @@ function Lithium:MakeWindow(WindowProperties)
 		end
 
 		for _, file in pairs(listfiles(savename)) do
-			Settings.PresetList:AddElement(string.sub(file, #savename, #file - 4))
+			Settings.PresetList:AddElement(string.sub(file, #savename+2, #file - 4))
 		end
 		
 		return Settings
