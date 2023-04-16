@@ -1683,6 +1683,9 @@ function Lithium:MakeWindow(WindowProperties)
 		end
 
 		for _, file in pairs(listfiles(savename)) do
+			print(file)
+			print(string.split(file, savename.."/")[2])
+			print(string.split(string.split(file, savename.."/")[2], ".txt")[1])
 			Settings.PresetList:AddElement(string.split(string.split(file, savename.."/")[2], ".txt")[1])
 		end
 		
