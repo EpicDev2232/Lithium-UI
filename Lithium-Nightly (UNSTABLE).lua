@@ -426,7 +426,10 @@ function Lithium:MakeWindow(WindowProperties)
 						Toggle.Value = false
 					end
 					
-					Toggle.ID = #Window.Elements
+					if not Toggle.ID then
+						Toggle.ID = Label.Name.."Toggle"
+					end
+
 					Toggle.Type = "Toggle"
 
 					-- ui
@@ -497,15 +500,14 @@ function Lithium:MakeWindow(WindowProperties)
 
 					-- defaults
 
-					if not ColorPicker.Name then
-						ColorPicker.Name = "new color picker"
-					end
-
 					if not ColorPicker.Color then
 						ColorPicker.Color = Color3.new(1,0,0)
 					end
 					
-					ColorPicker.ID = #Window.Elements
+					if not ColorPicker.ID then
+						ColorPicker.ID = Label.Name.."ColorPicker"
+					end
+
 					ColorPicker.Type = "ColorPicker"
 
 					local defH, defS, defV = ColorPicker.Color:ToHSV()
@@ -805,7 +807,10 @@ function Lithium:MakeWindow(WindowProperties)
 
 					Keybind.KeyDown = false
 					
-					Keybind.ID = #Window.Elements
+					if not Keybind.ID then
+						Keybind.ID = Label.Name.."Keybind"
+					end
+
 					Keybind.Type = "Keybind"
 
 					-- ui
@@ -947,7 +952,10 @@ function Lithium:MakeWindow(WindowProperties)
 					Slider.Def = Slider.Min
 				end
 				
-				Slider.ID = #Window.Elements
+				if not Slider.ID then
+					Slider.ID = "new slider"
+				end
+
 				Slider.Type = "Slider"
 				
 				-- ui
@@ -1079,7 +1087,10 @@ function Lithium:MakeWindow(WindowProperties)
 					Dropdown.SelectedElements = {}
 				end
 				
-				Dropdown.ID = #Window.Elements
+				if not Dropdown.ID then
+					Dropdown.ID = "new dropdown"
+				end
+
 				Dropdown.Type = "Dropdown"
 				
 				-- ui
@@ -1290,8 +1301,11 @@ function Lithium:MakeWindow(WindowProperties)
 				if not Textbox.Text then
 					Textbox.Text = "new textbox"
 				end
-				
-				Textbox.ID = #Window.Elements
+
+				if not Textbox.ID then
+					Textbox.ID = "new textbox"
+				end
+
 				Textbox.Type = "Textbox"
 				
 				-- ui
@@ -1662,6 +1676,10 @@ function Lithium:MakeWindow(WindowProperties)
 
 				Settings.PresetList:RemoveElement(Settings.PresetName.Text)
 			end
+		end
+
+		for _, file in pairs(listfiles(savename)) do
+			Settings.PresetList:AddElement(file)
 		end
 		
 		return Settings
