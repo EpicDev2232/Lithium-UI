@@ -1603,16 +1603,34 @@ function Lithium:MakeWindow(WindowProperties)
 			Keybind = {
 				Save = function(Keybind)
 					if Keybind.Key then
-						return Keybind.Key.Name
+						local name
+
+						pcall(function()
+							name = Keybind.Key.KeyCode.Name
+						end)
+
+						if not name then
+							pcall(function()
+								name = Keybind.Key.UserInputService.Name
+							end)	
+						end
+
+						return name
 					else
 						return nil
 					end
 				end,
 				Load = function(Keybind, Data)
-					local key = Enum.KeyCode[Data]
+					local key
+
+					pcall(function()
+						key = Enum.KeyCode[Data]
+					end)
 
 					if not key then
-						key = Enum.UserInputType[Data]
+						pcall(function()
+							key = Enum.KeyCode[Data]
+						end)
 					end
 
 					Keybind:ChangeKeybind(key)
@@ -1654,14 +1672,6 @@ function Lithium:MakeWindow(WindowProperties)
 		end
 		
 		Settings.LoadPreset.Callback = function()
-			print(savename.."/"..Settings.PresetName.Text..".txt", isfile(savename.."/"..Settings.PresetName.Text..".txt"))
-
-			for _, file in pairs(listfiles(savename)) do
-				print(file)
-			end
-
-			print("why it not working")
-
 			if isfile(savename.."/"..Settings.PresetName.Text..".txt") then
 				local fileData = readfile(savename.."/"..Settings.PresetName.Text..".txt")
 
