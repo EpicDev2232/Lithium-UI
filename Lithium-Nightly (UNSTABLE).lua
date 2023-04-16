@@ -1689,8 +1689,8 @@ function Lithium:MakeWindow(WindowProperties)
 		end
 
 		Settings.DeletePreset.Callback = function()
-			if isfile(savename.."/"..Settings.PresetName.Text) then
-				delfile(savename.."/"..Settings.PresetName.Text)
+			if isfile(savename.."/"..Settings.PresetName.Text..".txt") then
+				delfile(savename.."/"..Settings.PresetName.Text..".txt")
 
 				Settings.PresetList:RemoveElement(Settings.PresetName.Text)
 			end
