@@ -1654,8 +1654,8 @@ function Lithium:MakeWindow(WindowProperties)
 		end
 		
 		Settings.LoadPreset.Callback = function()
-			if isfile(savename.."/"..Settings.PresetName.Text) then
-				local fileData = readfile(savename.."/"..Settings.PresetName.Text)
+			if isfile(savename.."/"..Settings.PresetName.Text..".txt") then
+				local fileData = readfile(savename.."/"..Settings.PresetName.Text..".txt")
 
 				local jsonRead = HttpService:JSONDecode(fileData)
 
