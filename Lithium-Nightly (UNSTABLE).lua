@@ -888,7 +888,7 @@ function Lithium:MakeWindow(WindowProperties)
 						if key then
 							Keybind.Key = key
 
-							local name = key.KeyCode.Name
+							local name = key.Name
 
 							if name == "Unknown" then
 								name = key.UserInputType.Name
@@ -1621,21 +1621,6 @@ function Lithium:MakeWindow(WindowProperties)
 					end
 				end,
 				Load = function(Keybind, Data)
-					local key
-
-					pcall(function()
-						key = Enum.KeyCode[Data]
-					end)
-
-					if not key then
-						pcall(function()
-							key = Enum.KeyCode[Data]
-						end)
-					end
-
-					print(key)
-
-					Keybind:ChangeKeybind(key)
 				end,
 			},
 			ColorPicker = {
