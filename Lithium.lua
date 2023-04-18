@@ -37,9 +37,10 @@ function Lithium:MakeWindow(WindowProperties)
 	-- ui
 
 	local LithiumContainer = Instance.new("ScreenGui")
-	LithiumContainer.Parent = LocalPlayer.PlayerGui
+	LithiumContainer.Parent = PlayerGui
 	LithiumContainer.IgnoreGuiInset = true
 	LithiumContainer.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	LithiumContainer.ResetOnSpawn = false
 
 	Window.MouseCursor = Instance.new("Frame")
 	Window.MouseCursor.Parent = LithiumContainer
