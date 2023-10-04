@@ -1531,7 +1531,7 @@ function Lithium:MakeWindow(WindowProperties)
 		return Tab
 	end
 
-	function Window:UpdateTheme(theme)
+	function Window:UpdateThemeColor(colorName, theme)
 		if Window.Theme[colorName] then
 			Window.Theme[colorName] = color
 
