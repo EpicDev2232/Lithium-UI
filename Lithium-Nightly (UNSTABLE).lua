@@ -1532,7 +1532,17 @@ function Lithium:MakeWindow(WindowProperties)
 	end
 
 	function Window:UpdateTheme(theme)
+		if Window.Theme[colorName] then
+			Window.Theme[colorName] = color
 
+			for _, ui in pairs(LithiumContainer:GetDescendants()) do
+				for name, value in pairs(ui:GetAttributes()) do
+					if name == colorName then
+						name[colorName] = color
+					end
+				end
+			end
+		end
 	end
 	
 	function Window:MakeSettingsTab(savename)
@@ -1690,6 +1700,44 @@ function Lithium:MakeWindow(WindowProperties)
 
 		for _, file in pairs(listfiles(savename)) do
 			Settings.PresetList:AddElement(string.sub(file, #savename + 2, #file - 4))
+		end
+
+		Settings.ThemePanel = Settings.SettingsTab:MakePanel({Name = "theme", Side = "Right"})
+
+		Settings.ThemeOutlinesLabel = Settings.ThemePanel:MakeLabel({Name = "outlines"})
+		Settings.ThemeOutlines = Settings.ThemeOutlinesLabel:MakeColorPicker({Color = Window.Theme.Outlines})
+		Settings.ThemeOutlines.Callback = function(value)
+			Window:UpdateThemeColor("Outlines", value)
+		end
+
+		Settings.ThemeColor1Label = Settings.ThemePanel:MakeLabel({Name = "color 1"})
+		Settings.ThemeColor1 = Settings.ThemeColor1Label:MakeColorPicker({Color = Window.Theme.Color1})
+		Settings.ThemeColor1.Callback = function(value)
+			Window:UpdateThemeColor("Color1", value)
+		end
+
+		Settings.ThemeColor2Label = Settings.ThemePanel:MakeLabel({Name = "color 2"})
+		Settings.ThemeColor2 = Settings.ThemeColor2Label:MakeColorPicker({Color = Window.Theme.Color2})
+		Settings.ThemeColor2.Callback = function(value)
+			Window:UpdateThemeColor("Color2", value)
+		end
+
+		Settings.ThemeAccentLabel = Settings.ThemePanel:MakeLabel({Name = "accent"})
+		Settings.ThemeAccent = Settings.ThemeAccentLabel:MakeColorPicker({Color = Window.Theme.Accent})
+		Settings.ThemeAccent.Callback = function(value)
+			Window:UpdateThemeColor("Accent", value)
+		end
+
+		Settings.ThemeTextLabel = Settings.ThemePanel:MakeLabel({Name = "text color"})
+		Settings.ThemeText = Settings.ThemeTextLabel:MakeColorPicker({Color = Window.Theme.TextColor})
+		Settings.ThemeText.Callback = function(value)
+			Window:UpdateThemeColor("TextColor", value)
+		end
+
+		Settings.ThemeTextOutlinesLabel = Settings.ThemePanel:MakeLabel({Name = "text outline"})
+		Settings.ThemeTextOutlines = Settings.ThemeTextOutlinesLabel:MakeColorPicker({Color = Window.Theme.TextOutlineColor})
+		Settings.ThemeTextOutlines.Callback = function(value)
+			Window:UpdateThemeColor("TextOutlineColor", value)
 		end
 		
 		return Settings
