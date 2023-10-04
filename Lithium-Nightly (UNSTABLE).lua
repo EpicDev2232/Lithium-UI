@@ -132,10 +132,18 @@ function Lithium:MakeWindow(WindowProperties)
 	-- code
 
 	UserInputService.InputBegan:Connect(function(input, gameProcessed)
+		print(input.KeyCode, input.KeyCode == Enum.KeyCode.RightShift)
+			
 		if input.KeyCode == Enum.KeyCode.RightShift then
+			print("j")
+				
 			Window.Enabled = not Window.Enabled
 
+			print("caraguer")
+
 			LithiumContainer.Enabled = Window.Enabled
+
+			print(LithiumContainer.Enabled , Window.Enabled)
 		elseif input.UserInputType == Enum.UserInputType.MouseButton1 then
 			local mousePosition = UserInputService:GetMouseLocation() - Vector2.new(0, 30)
 
