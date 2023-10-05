@@ -140,7 +140,7 @@ function Lithium:MakeWindow(WindowProperties)
 	-- code
 
 	UserInputService.InputBegan:Connect(function(input, gameProcessed)
-		if input.KeyCode == Enum.KeyCode.RightShift then
+		if input.KeyCode == Enum.KeyCode.Delete then
 			Window.Enabled = not Window.Enabled
 
 			LithiumContainer.Enabled = Window.Enabled
