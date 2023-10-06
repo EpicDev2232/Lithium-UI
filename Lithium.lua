@@ -378,6 +378,8 @@ function Lithium:MakeWindow(WindowProperties)
 
 			-- functions
 
+			local dropdownzindexes = 50
+
 			function Panel:UpdateSize()
 				local totalSize = 20 -- default size
 
@@ -1114,7 +1116,9 @@ function Lithium:MakeWindow(WindowProperties)
 				Dropdown.DropdownFrame.BorderColor3 = Window.Theme.Outlines
 
 				Dropdown.DropdownFrame:SetAttribute("BorderColor3", "Outlines")
-				Dropdown.DropdownFrame.ZIndex = 10
+				Dropdown.DropdownFrame.ZIndex = dropdownzindexes
+
+				dropdownzindexes -= 1
 
 				local DropdownBackground = Instance.new("Frame")
 				DropdownBackground.Parent = Dropdown.DropdownFrame
@@ -1123,7 +1127,7 @@ function Lithium:MakeWindow(WindowProperties)
 
 				DropdownBackground.BackgroundColor3 = Window.Theme.Color1
 				DropdownBackground.BorderColor3 = Color3.new()
-				DropdownBackground.ZIndex = 2
+				DropdownBackground.ZIndex = 10
 
 				DropdownBackground:SetAttribute("BackgroundColor3", "Color1")
 
@@ -1600,7 +1604,7 @@ function Lithium:MakeWindow(WindowProperties)
 					local elements = Dropdown.SelectedElements
 					local buffer = {}
 
-					for name, _ in pairs(elements) do
+					for name, _ in elements do
 						table.insert(buffer, name)
 					end
 
@@ -1608,11 +1612,11 @@ function Lithium:MakeWindow(WindowProperties)
 				end,
 
 				Load = function(Dropdown, Data)
-					for name, _ in pairs(Dropdown.Elements) do
+					for name, _ in Dropdown.Elements do
 						Dropdown:ElementToggleSelected(name, false)
 					end
 
-					for _, name in pairs(Data) do
+					for _, name in Data do
 						Dropdown:ElementToggleSelected(name, true)
 					end
 				end,
@@ -1646,6 +1650,13 @@ function Lithium:MakeWindow(WindowProperties)
 					end
 				end,
 				Load = function(Keybind, Data)
+					local key = Enum.KeyCode[Data]
+
+					if not(key) then
+						key = Enum.UserInputType[Data]
+					end
+
+					return key
 				end,
 			},
 			ColorPicker = {
