@@ -1240,8 +1240,8 @@ function Lithium:MakeWindow(WindowProperties)
 					DropdownElementListScrollFrame.Size = UDim2.new(1, 0, 0, sizeY)
 				end
 
-				DropdownElementListScrollFrame.ChildAdded:Connect(UpdateSize)
-				DropdownElementListScrollFrame.ChildRemoved:Connect(UpdateSize)
+				DropdownElementListScrollFrame.ChildAdded:Connect(function() UpdateSize() end)
+				DropdownElementListScrollFrame.ChildRemoved:Connect(function() UpdateSize() end)
 
 				local label = ""
 						
