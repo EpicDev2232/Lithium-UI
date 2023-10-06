@@ -1251,11 +1251,13 @@ function Lithium:MakeWindow(WindowProperties)
 						newElement.Size = UDim2.new(1, 0, 0, 13)
 						
 						newElement.BackgroundTransparency = 1
-						newElement.TextColor3 = Color3.new(1,1,1)
+						newElement.TextColor3 = Theme.TextColor
 						newElement.TextStrokeTransparency = 0
 						newElement.TextSize = 14
 						newElement.FontFace = Font.fromName("Inconsolata")
 						newElement.Text = name
+
+						newElement:SetAttribute("TextColor3", "TextColor")
 						
 						newElement.Activated:Connect(function()
 							Dropdown:ElementToggleSelected(name)
@@ -1295,7 +1297,10 @@ function Lithium:MakeWindow(WindowProperties)
 						if Dropdown.Callback then
 							task.spawn(function() Dropdown.Callback(Dropdown.SelectedElements) end)
 						end
-						
+
+						Dropdown.Elements[name].TextColor3 = bool and Theme.Accent or Theme.TextColor
+						Dropdown.Elements[name]:SetAttribute("TextColor3", bool and "Accent" or "TextColor")
+
 						local label = ""
 						
 						for name, _ in pairs(Dropdown.SelectedElements) do
