@@ -1114,6 +1114,7 @@ function Lithium:MakeWindow(WindowProperties)
 				Dropdown.DropdownFrame.BorderColor3 = Window.Theme.Outlines
 
 				Dropdown.DropdownFrame:SetAttribute("BorderColor3", "Outlines")
+				Dropdown.DropdownFrame.ZIndex = 10
 
 				local DropdownBackground = Instance.new("Frame")
 				DropdownBackground.Parent = Dropdown.DropdownFrame
