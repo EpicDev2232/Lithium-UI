@@ -877,14 +877,9 @@ function Lithium:MakeWindow(WindowProperties)
 
 					UserInputService.InputBegan:Connect(function(input)
 						if Keybind.Key then
-							print(
-								input.KeyCode , Enum.KeyCode.Unknown , input.KeyCode ,Keybind.Key.KeyCode ,
-								input.UserInputType , Enum.UserInputType.None , input.UserInputType , Keybind.Key.UserInputType
-							)
-
 							if
 								(input.KeyCode ~= Enum.KeyCode.Unknown and input.KeyCode == Keybind.Key.KeyCode) or
-								(input.UserInputType ~= Enum.UserInputType.None and input.UserInputType == Keybind.Key.UserInputType)
+								(input.UserInputType ~= Enum.UserInputType.Keyboard and input.UserInputType == Keybind.Key.UserInputType)
 							then
 								Keybind.KeyDown = true
 
@@ -897,7 +892,10 @@ function Lithium:MakeWindow(WindowProperties)
 
 					UserInputService.InputEnded:Connect(function(input)
 						if Keybind.Key then
-							if input.KeyCode == Keybind.Key.KeyCode or input.UserInputType == Keybind.Key.UserInputType then
+							if
+								(input.KeyCode ~= Enum.KeyCode.Unknown and input.KeyCode == Keybind.Key.KeyCode) or
+								(input.UserInputType ~= Enum.UserInputType.Keyboard and input.UserInputType == Keybind.Key.UserInputType)
+							then
 								Keybind.KeyDown = false
 
 								if Keybind.KeyReleased then
@@ -911,7 +909,10 @@ function Lithium:MakeWindow(WindowProperties)
 
 					function Keybind:ChangeKeybind(key)
 						if key then
-							Keybind.Key = key
+							Keybind.Key = {
+								KeyCode = key.KeyCode,
+								UserInputType = key.UserInputType
+							}
 
 							local name = key.KeyCode.Name
 
