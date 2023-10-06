@@ -877,6 +877,11 @@ function Lithium:MakeWindow(WindowProperties)
 
 					UserInputService.InputBegan:Connect(function(input)
 						if Keybind.Key then
+							print(
+								input.KeyCode , Enum.KeyCode.Unknown , input.KeyCode ,Keybind.Key.KeyCode ,
+								input.UserInputType , Enum.UserInputType.None , input.UserInputType , Keybind.Key.UserInputType
+							)
+
 							if
 								(input.KeyCode ~= Enum.KeyCode.Unknown and input.KeyCode == Keybind.Key.KeyCode) or
 								(input.UserInputType ~= Enum.UserInputType.None and input.UserInputType == Keybind.Key.UserInputType)
