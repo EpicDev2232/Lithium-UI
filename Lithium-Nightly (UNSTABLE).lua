@@ -1654,15 +1654,12 @@ function Lithium:MakeWindow(WindowProperties)
 					end
 				end,
 				Load = function(Keybind, Data)
-					local key = Enum.KeyCode[Data]
-
-					if not(key) then
-						key = Enum.UserInputType[Data]
-					end
+					local keyCode = Enum.KeyCode[Data]
+					local userInputType = Enum.UserInputType[Data]
 
 					Keybind:ChangeKeybind({
-						UserInputType = key.UserInputType,
-						KeyCode = key.KeyCode
+						UserInputType = userInputType,
+						KeyCode = keyCode
 					})
 				end,
 			},
