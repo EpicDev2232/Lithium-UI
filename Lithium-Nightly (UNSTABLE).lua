@@ -1217,7 +1217,6 @@ function Lithium:MakeWindow(WindowProperties)
 				local DropdownElementListScrollFrame = Instance.new("ScrollingFrame")
 				DropdownElementListScrollFrame.Parent = DropdownElementList
 				DropdownElementListScrollFrame.Size = UDim2.new(1, 0, 1, 0)
-				DropdownElementListScrollFrame.AutomaticSize = Enum.AutomaticSize.XY
 				
 				DropdownElementListScrollFrame.BackgroundTransparency = 1
 				DropdownElementListScrollFrame.ScrollBarThickness = 3
@@ -1228,6 +1227,9 @@ function Lithium:MakeWindow(WindowProperties)
 				ListLayout.Padding = UDim.new(0, 5)
 				
 				-- code
+
+				DropdownElementListScrollFrame.ChildAdded:Connect(Dropdown.UpdateSize)
+				DropdownElementListScrollFrame.ChildRemoved:Connect(Dropdown.UpdateSize)
 
 				local label = ""
 						
@@ -1245,6 +1247,18 @@ function Lithium:MakeWindow(WindowProperties)
 
 				-- functions
 				
+				function Dropdown:UpdateSize()
+					local sizeY = 0
+
+					for _, child in DropdownElementListScrollFrame:GetChildren() do
+						if child:IsA("TextButton") then
+							sizeY += child.Size.Y.Offset + 5
+						end
+					end
+
+					DropdownElementListScrollFrame.Size = UDim2.new(1, 0, 0, sizeY)
+				end
+
 				function Dropdown:AddElement(name)
 					if not Dropdown.Elements[name] then
 						local newElement = Instance.new("TextButton")
