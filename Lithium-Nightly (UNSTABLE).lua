@@ -877,7 +877,10 @@ function Lithium:MakeWindow(WindowProperties)
 
 					UserInputService.InputBegan:Connect(function(input)
 						if Keybind.Key then
-							if input.KeyCode == Keybind.Key.KeyCode or input.UserInputType == Keybind.Key.UserInputType then
+							if
+								(input.KeyCode ~= Enum.KeyCode.Unknown and input.KeyCode == Keybind.Key.KeyCode) or
+								(input.UserInputType ~= Enum.UserInputType.None and input.UserInputType == Keybind.Key.UserInputType)
+							then
 								Keybind.KeyDown = true
 
 								if Keybind.KeyPressed then
