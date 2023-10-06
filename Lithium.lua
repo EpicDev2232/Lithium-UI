@@ -1656,7 +1656,7 @@ function Lithium:MakeWindow(WindowProperties)
 						key = Enum.UserInputType[Data]
 					end
 
-					return key
+					Keybind:ChangeKeybind(key)
 				end,
 			},
 			ColorPicker = {
