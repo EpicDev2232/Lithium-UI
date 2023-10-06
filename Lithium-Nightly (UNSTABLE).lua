@@ -1228,8 +1228,20 @@ function Lithium:MakeWindow(WindowProperties)
 				
 				-- code
 
-				DropdownElementListScrollFrame.ChildAdded:Connect(Dropdown.UpdateSize)
-				DropdownElementListScrollFrame.ChildRemoved:Connect(Dropdown.UpdateSize)
+				local function UpdateSize()
+					local sizeY = 0
+
+					for _, child in DropdownElementListScrollFrame:GetChildren() do
+						if child:IsA("TextButton") then
+							sizeY += child.Size.Y.Offset + 5
+						end
+					end
+
+					DropdownElementListScrollFrame.Size = UDim2.new(1, 0, 0, sizeY)
+				end
+
+				DropdownElementListScrollFrame.ChildAdded:Connect(UpdateSize)
+				DropdownElementListScrollFrame.ChildRemoved:Connect(UpdateSize)
 
 				local label = ""
 						
@@ -1246,18 +1258,6 @@ function Lithium:MakeWindow(WindowProperties)
 				DropdownLabel.Text = label
 
 				-- functions
-				
-				function Dropdown:UpdateSize()
-					local sizeY = 0
-
-					for _, child in DropdownElementListScrollFrame:GetChildren() do
-						if child:IsA("TextButton") then
-							sizeY += child.Size.Y.Offset + 5
-						end
-					end
-
-					DropdownElementListScrollFrame.Size = UDim2.new(1, 0, 0, sizeY)
-				end
 
 				function Dropdown:AddElement(name)
 					if not Dropdown.Elements[name] then
