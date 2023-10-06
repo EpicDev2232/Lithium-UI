@@ -1237,7 +1237,7 @@ function Lithium:MakeWindow(WindowProperties)
 						end
 					end
 
-					DropdownElementListScrollFrame.CanvasSize = UDim2.new(1, 0, 0, sizeY)
+					DropdownElementListScrollFrame.CanvasSize = UDim2.new(0, 0, 0, sizeY + 10)
 				end
 
 				DropdownElementListScrollFrame.ChildAdded:Connect(function() UpdateSize() end)
