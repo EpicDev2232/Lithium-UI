@@ -1279,8 +1279,15 @@ function Lithium:MakeWindow(WindowProperties)
 				end
 				
 				function Dropdown:ElementToggleSelected(name, bool)
-					if Dropdown.Elements[name] then
+					local elementLabel = Dropdown.Elements[name]
+
+					if elementLabel then
 						if not Dropdown.SelectMultiple then
+							for _, subLabel in Dropdown.SelectedElements do
+								subLabel.TextColor3 = Theme.TextColor
+								subLabel:SetAttribute("TextColor3", "TextColor")
+							end
+
 							Dropdown.SelectedElements = {}
 						end
 						
@@ -1289,7 +1296,7 @@ function Lithium:MakeWindow(WindowProperties)
 						end
 						
 						if bool then
-							Dropdown.SelectedElements[name] = Dropdown.Elements[name]
+							Dropdown.SelectedElements[name] = elementLabel
 						else
 							Dropdown.SelectedElements[name] = nil
 						end
@@ -1298,8 +1305,8 @@ function Lithium:MakeWindow(WindowProperties)
 							task.spawn(function() Dropdown.Callback(Dropdown.SelectedElements) end)
 						end
 
-						Dropdown.Elements[name].TextColor3 = bool and Theme.Accent or Theme.TextColor
-						Dropdown.Elements[name]:SetAttribute("TextColor3", bool and "Accent" or "TextColor")
+						elementLabel.TextColor3 = bool and Theme.Accent or Theme.TextColor
+						elementLabel:SetAttribute("TextColor3", bool and "Accent" or "TextColor")
 
 						local label = ""
 						
