@@ -1217,6 +1217,7 @@ function Lithium:MakeWindow(WindowProperties)
 				local DropdownElementListScrollFrame = Instance.new("ScrollingFrame")
 				DropdownElementListScrollFrame.Parent = DropdownElementList
 				DropdownElementListScrollFrame.Size = UDim2.new(1, 0, 1, 0)
+				DropdownElementListScrollFrame.AutomaticSize = Enum.AutomaticSize.XY
 				
 				DropdownElementListScrollFrame.BackgroundTransparency = 1
 				DropdownElementListScrollFrame.ScrollBarThickness = 3
