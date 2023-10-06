@@ -15,14 +15,22 @@ function Lithium:MakeWindow(WindowProperties)
 
 	-- default
 
-	if not Window.Theme then
-		Window.Theme = {
-			Outlines = Color3.fromRGB(67, 67, 67),
-			Color1 = Color3.fromRGB(33, 33, 33),
-			Color2 = Color3.fromRGB(24, 24, 24),
-			Accent = Color3.fromRGB(166, 120, 175),
-		}
+	local Theme = {
+		Outlines = Color3.fromRGB(67, 67, 67),
+		Color1 = Color3.fromRGB(33, 33, 33),
+		Color2 = Color3.fromRGB(24, 24, 24),
+		Accent = Color3.fromRGB(166, 120, 175),
+		TextColor = Color3.fromRGB(255, 255, 255),
+		TextOutlineColor = Color3.fromRGB(0, 0, 0),
+	}
+
+	if Window.Theme then
+		for index, color in pairs(Window.Theme) do
+			Theme[index] = color
+		end
 	end
+
+	Window.Theme = Theme
 
 	if not Window.Title then
 		Window.Title = "lithium.ui"
@@ -132,7 +140,7 @@ function Lithium:MakeWindow(WindowProperties)
 	-- code
 
 	UserInputService.InputBegan:Connect(function(input, gameProcessed)
-		if input.KeyCode == Enum.KeyCode.Delete then	
+		if input.KeyCode == Enum.KeyCode.Delete then
 			Window.Enabled = not Window.Enabled
 
 			LithiumContainer.Enabled = Window.Enabled
@@ -369,6 +377,8 @@ function Lithium:MakeWindow(WindowProperties)
 			end)
 
 			-- functions
+
+			local dropdownzindexes = 50
 
 			function Panel:UpdateSize()
 				local totalSize = 20 -- default size
@@ -846,39 +856,45 @@ function Lithium:MakeWindow(WindowProperties)
 					-- code
 
 					KeybindButton.Activated:Connect(function()
-						KeybindButton.Text = "_"
-						Keybind.Key = nil
+						if LithiumContainer.Enabled then
+							KeybindButton.Text = "_"
+							Keybind.Key = nil
 
-						local KeyChange
+							local KeyChange
 
-						KeyChange = UserInputService.InputBegan:Connect(function(input)
-							if input.KeyCode == Enum.KeyCode.Backspace then
-								Keybind:ChangeKeybind(nil)
-							else
-								Keybind:ChangeKeybind(input)
-							end
+							KeyChange = UserInputService.InputBegan:Connect(function(input)
+								if input.KeyCode == Enum.KeyCode.Backspace then
+									Keybind:ChangeKeybind(nil)
+								else
+									Keybind:ChangeKeybind(input)
+								end
 
-							KeyChange:Disconnect()
-							KeyChange = nil
-						end)
+								KeyChange:Disconnect()
+								KeyChange = nil
+							end)
+						end
 					end)
 
 					UserInputService.InputBegan:Connect(function(input)
-						if input == Keybind.Key then
-							Keybind.KeyDown = true
+						if Keybind.Key then
+							if input.KeyCode == Keybind.Key.KeyCode or input.UserInputType == Keybind.Key.UserInputType then
+								Keybind.KeyDown = true
 
-							if Keybind.KeyPressed then
-								task.spawn(function() Keybind.KeyPressed() end)
+								if Keybind.KeyPressed then
+									task.spawn(function() Keybind.KeyPressed() end)
+								end
 							end
 						end
 					end)
 
 					UserInputService.InputEnded:Connect(function(input)
-						if input == Keybind.Key then
-							Keybind.KeyDown = false
+						if Keybind.Key then
+							if input.KeyCode == Keybind.Key.KeyCode or input.UserInputType == Keybind.Key.UserInputType then
+								Keybind.KeyDown = false
 
-							if Keybind.KeyReleased then
-								task.spawn(function() Keybind.KeyReleased() end)
+								if Keybind.KeyReleased then
+									task.spawn(function() Keybind.KeyReleased() end)
+								end
 							end
 						end
 					end)
@@ -1104,6 +1120,9 @@ function Lithium:MakeWindow(WindowProperties)
 				Dropdown.DropdownFrame.BorderColor3 = Window.Theme.Outlines
 
 				Dropdown.DropdownFrame:SetAttribute("BorderColor3", "Outlines")
+				Dropdown.DropdownFrame.ZIndex = dropdownzindexes
+
+				dropdownzindexes -= 1
 
 				local DropdownBackground = Instance.new("Frame")
 				DropdownBackground.Parent = Dropdown.DropdownFrame
@@ -1427,7 +1446,8 @@ function Lithium:MakeWindow(WindowProperties)
 
 				TextboxButton.BackgroundTransparency = 1
 
-				TextboxButton.TextColor3 = Color3.new(1,1,1)
+				TextboxButton.TextColor3 = Window.Theme.TextColor
+				TextboxButton.TextStrokeColor3 = Window.Theme.TextOutlineColor
 				TextboxButton.TextStrokeTransparency = 0
 				TextboxButton.TextSize = 14
 				TextboxButton.FontFace = Font.fromName("Inconsolata")
@@ -1456,6 +1476,8 @@ function Lithium:MakeWindow(WindowProperties)
 						task.spawn(function() Button.Callback() end)
 					end
 				end)
+
+				Panel:UpdateSize()
 
 				return ButtonProperties
 			end
@@ -1531,7 +1553,7 @@ function Lithium:MakeWindow(WindowProperties)
 		return Tab
 	end
 
-	function Window:UpdateThemeColor(colorName, theme)
+	function Window:UpdateThemeColor(colorName, color)
 		if Window.Theme[colorName] then
 			Window.Theme[colorName] = color
 
@@ -1586,7 +1608,7 @@ function Lithium:MakeWindow(WindowProperties)
 					local elements = Dropdown.SelectedElements
 					local buffer = {}
 
-					for name, _ in pairs(elements) do
+					for name, _ in elements do
 						table.insert(buffer, name)
 					end
 
@@ -1594,11 +1616,11 @@ function Lithium:MakeWindow(WindowProperties)
 				end,
 
 				Load = function(Dropdown, Data)
-					for name, _ in pairs(Dropdown.Elements) do
+					for name, _ in Dropdown.Elements do
 						Dropdown:ElementToggleSelected(name, false)
 					end
 
-					for _, name in pairs(Data) do
+					for _, name in Data do
 						Dropdown:ElementToggleSelected(name, true)
 					end
 				end,
@@ -1632,6 +1654,16 @@ function Lithium:MakeWindow(WindowProperties)
 					end
 				end,
 				Load = function(Keybind, Data)
+					local key = Enum.KeyCode[Data]
+
+					if not(key) then
+						key = Enum.UserInputType[Data]
+					end
+
+					Keybind:ChangeKeybind({
+						UserInputType = key.UserInputType,
+						KeyCode = key.KeyCode
+					})
 				end,
 			},
 			ColorPicker = {
@@ -1739,7 +1771,7 @@ function Lithium:MakeWindow(WindowProperties)
 		Settings.ThemeTextOutlines.Callback = function(value)
 			Window:UpdateThemeColor("TextOutlineColor", value)
 		end
-		
+
 		return Settings
 	end
 
