@@ -1226,6 +1226,22 @@ function Lithium:MakeWindow(WindowProperties)
 				ListLayout.Parent = DropdownElementListScrollFrame
 				ListLayout.Padding = UDim.new(0, 5)
 				
+				-- code
+
+				local label = ""
+						
+				for name, _ in pairs(Dropdown.SelectedElements) do
+					label = label.. name.. ","
+				end
+				
+				label = string.sub(label, 1, #label - 1)
+				
+				if #label > 30 then
+					label = string.sub(label, 1, 29).. "..."
+				end
+				
+				DropdownLabel.Text = label
+
 				-- functions
 				
 				function Dropdown:AddElement(name)
