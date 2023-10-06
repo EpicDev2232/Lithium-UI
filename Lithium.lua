@@ -876,7 +876,7 @@ function Lithium:MakeWindow(WindowProperties)
 					end)
 
 					UserInputService.InputBegan:Connect(function(input)
-						if input == Keybind.Key then
+						if input.KeyCode == Keybind.Key.KeyCode or input.UserInputType == Keybind.Key.UserInputType then
 							Keybind.KeyDown = true
 
 							if Keybind.KeyPressed then
@@ -886,7 +886,7 @@ function Lithium:MakeWindow(WindowProperties)
 					end)
 
 					UserInputService.InputEnded:Connect(function(input)
-						if input == Keybind.Key then
+						if input.KeyCode == Keybind.Key.KeyCode or input.UserInputType == Keybind.Key.UserInputType then
 							Keybind.KeyDown = false
 
 							if Keybind.KeyReleased then
@@ -1127,7 +1127,7 @@ function Lithium:MakeWindow(WindowProperties)
 
 				DropdownBackground.BackgroundColor3 = Window.Theme.Color1
 				DropdownBackground.BorderColor3 = Color3.new()
-				DropdownBackground.ZIndex = 10
+				DropdownBackground.ZIndex = 2
 
 				DropdownBackground:SetAttribute("BackgroundColor3", "Color1")
 
@@ -1656,7 +1656,10 @@ function Lithium:MakeWindow(WindowProperties)
 						key = Enum.UserInputType[Data]
 					end
 
-					Keybind:ChangeKeybind(key)
+					Keybind:ChangeKeybind({
+						UserInputType = key.UserInputType,
+						KeyCode = key.KeyCode
+					})
 				end,
 			},
 			ColorPicker = {
