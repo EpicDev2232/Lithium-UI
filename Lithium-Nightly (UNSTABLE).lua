@@ -1455,6 +1455,8 @@ function Lithium:MakeWindow(WindowProperties)
 				end)
 				
 				table.insert(Window.Elements, Textbox)
+
+				Panel:UpdateSize()
 				
 				return TextboxProperties
 			end
