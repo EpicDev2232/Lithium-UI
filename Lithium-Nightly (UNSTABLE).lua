@@ -1741,12 +1741,12 @@ function Lithium:MakeWindow(WindowProperties)
 					Slider:SetValue(Data)
 				end,
 			},
-			TextBox = {
-				Save = function(TextBox)
-					return TextBox.Value
+			Textbox = {
+				Save = function(Textbox)
+					return Textbox.Value
 				end,
-				Load = function(TextBox, Data)
-					TextBox:SetText(Data)
+				Load = function(Textbox, Data)
+					Textbox:SetText(Data)
 				end,
 			}
 
