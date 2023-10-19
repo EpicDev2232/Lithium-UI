@@ -1743,7 +1743,7 @@ function Lithium:MakeWindow(WindowProperties)
 			},
 			Textbox = {
 				Save = function(Textbox)
-					return Textbox.Value
+					return Textbox.Text
 				end,
 				Load = function(Textbox, Data)
 					Textbox:SetText(Data)
